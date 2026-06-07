@@ -1,5 +1,6 @@
 use std::{any::Any, cell::RefCell};
 
+use bc_utils::other::roll_slice1;
 use bc_utils_lg::types::maps::MAP;
 
 fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>]) -> C
@@ -8,27 +9,20 @@ where
     T: TrainSignals,
     T: ?Sized,
 {
-    let bf = signal_struct.bf(&src[..signal_struct.get_window()
-        * signal_struct.get_mult_window_accuracy()
-        + signal_struct.get_add_window_accuracy()]);
-    src.iter()
-        .enumerate()
-        .map(|(i, v)| {
-            if i < signal_struct.get_window() * signal_struct.get_mult_window_accuracy()
-                + signal_struct.get_add_window_accuracy()
-            {
-                f64::NAN
-            } else {
-                signal_struct.signal_with_bf(v, &bf, 0)
-            }
+    let w = signal_struct.w();
+    let bf = signal_struct.bf(&src[..w]);
+    src
+        .iter()
+        .skip(w)
+        .map(|v| {
+            signal_struct.signal_with_bf(v, &bf, 0)
         })
+        .chain(std::iter::repeat(f64::NAN).take(w))
         .collect()
 }
 
 pub trait TrainSignals: Any {
-    fn get_window(&self) -> usize;
-    fn get_mult_window_accuracy(&self) -> usize;
-    fn get_add_window_accuracy(&self) -> usize;
+    fn w(&self) -> usize;
     fn bf(&self, src: &[Vec<f64>]) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>;
     fn signal_with_bf(
         &self,
@@ -38,7 +32,7 @@ pub trait TrainSignals: Any {
     ) -> f64;
     fn signal(&self, src: &[Vec<f64>]) -> f64 {
         let bf = self.bf(&src[src.len()
-            - (self.get_window() * self.get_mult_window_accuracy() + self.get_add_window_accuracy())
+            - (self.w())
             - 1..src.len() - 1]);
         self.signal_with_bf(src.last().unwrap(), &bf, 0)
     }

@@ -34,7 +34,7 @@ where
 {
     assert_eq!(
         dbg!(settings_signal.signal_coll::<Vec<_>>(&in_[in_.len() - len_elements..]))
-            [len_elements - 1],
+            [len_elements - 1 - settings_signal.w()],
         eq,
     );
 }
@@ -45,7 +45,7 @@ where
 {
     let in_ = &in_[in_.len() - len_elements..];
     assert_eq!(
-        settings_signal.signal_coll::<Vec<_>>(in_)[len_elements - 1],
+        settings_signal.signal_coll::<Vec<_>>(in_)[len_elements - 1 - settings_signal.w()],
         settings_signal.signal(in_),
     );
 }

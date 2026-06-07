@@ -75,15 +75,9 @@ impl Default for MM {
 }
 
 impl TrainSignals for MM {
-    fn get_window(&self) -> usize {
-        self.window
-    }
-    fn get_mult_window_accuracy(&self) -> usize {
-        self.mult_window_accuracy
-    }
-    fn get_add_window_accuracy(&self) -> usize {
-        self.add_window_accuracy
-    }
+    fn w(&self) -> usize {
+self.window * self.mult_window_accuracy + self.add_window_accuracy
+}
     fn bf(&self, src: &[Vec<f64>]) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
         RefCell::new(vec![MAP::from_iter([(
             "src_l_vec",
