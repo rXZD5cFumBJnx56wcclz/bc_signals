@@ -65,7 +65,6 @@ impl MM {
     pub fn set_tp_limit(&mut self, tp_limit: f64) {
         self.tp_limit = tp_limit;
     }
-
 }
 
 impl Default for MM {
@@ -76,8 +75,8 @@ impl Default for MM {
 
 impl TrainSignals for MM {
     fn w(&self) -> usize {
-self.window * self.mult_window_accuracy + self.add_window_accuracy
-}
+        self.window * self.mult_window_accuracy + self.add_window_accuracy
+    }
     fn bf(&self, src: &[Vec<f64>]) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
         RefCell::new(vec![MAP::from_iter([(
             "src_l_vec",
@@ -112,13 +111,13 @@ self.window * self.mult_window_accuracy + self.add_window_accuracy
             v.clone()
                 .min_by(|v1, v2| v1.1.partial_cmp(&v2.1).unwrap_or(Equal))
                 .unwrap_or_default(),
-            1.0,
+            2.0,
         );
         let max_ = (
             v.clone()
                 .max_by(|v1, v2| v1.1.partial_cmp(&v2.1).unwrap_or(Equal))
                 .unwrap_or_default(),
-            -1.0,
+            1.0,
         );
         let percent =
             (max_.0.1[self.index_max] - min_.0.1[self.index_min]) / max_.0.1[self.index_max];

@@ -1,6 +1,5 @@
 use std::{any::Any, cell::RefCell};
 
-use bc_utils::other::roll_slice1;
 use bc_utils_lg::types::maps::MAP;
 
 fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>]) -> C
@@ -11,12 +10,9 @@ where
 {
     let w = signal_struct.w();
     let bf = signal_struct.bf(&src[..w]);
-    src
-        .iter()
+    src.iter()
         .skip(w)
-        .map(|v| {
-            signal_struct.signal_with_bf(v, &bf, 0)
-        })
+        .map(|v| signal_struct.signal_with_bf(v, &bf, 0))
         .chain(std::iter::repeat(f64::NAN).take(w))
         .collect()
 }
@@ -31,9 +27,7 @@ pub trait TrainSignals: Any {
         index_: usize,
     ) -> f64;
     fn signal(&self, src: &[Vec<f64>]) -> f64 {
-        let bf = self.bf(&src[src.len()
-            - (self.w())
-            - 1..src.len() - 1]);
+        let bf = self.bf(&src[src.len() - (self.w()) - 1..src.len() - 1]);
         self.signal_with_bf(src.last().unwrap(), &bf, 0)
     }
     fn signals_vec(&self, src: &[Vec<f64>]) -> Vec<f64> {
