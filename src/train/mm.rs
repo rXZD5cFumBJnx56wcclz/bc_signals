@@ -80,7 +80,7 @@ impl TrainSignals for MM {
     fn bf(&self, src: &[Vec<f64>]) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
         RefCell::new(vec![MAP::from_iter([(
             "src_l_vec",
-            src[src.len() - self.window * self.mult_window_accuracy - self.add_window_accuracy..]
+            src[src.len() - self.w()..]
                 .to_vec(),
         )])])
     }
@@ -109,18 +109,17 @@ impl TrainSignals for MM {
         let v = bind[index_]["src_l_vec"].iter().cloned().enumerate();
         let min_ = (
             v.clone()
-                .min_by(|v1, v2| v1.1.partial_cmp(&v2.1).unwrap_or(Equal))
+                .min_by(|v1, v2| v1.1[self.index_min].partial_cmp(&v2.1[self.index_min]).unwrap_or(Equal))
                 .unwrap_or_default(),
             2.0,
         );
         let max_ = (
             v.clone()
-                .max_by(|v1, v2| v1.1.partial_cmp(&v2.1).unwrap_or(Equal))
+                .max_by(|v1, v2| v1.1[self.index_max].partial_cmp(&v2.1[self.index_max]).unwrap_or(Equal))
                 .unwrap_or_default(),
             1.0,
         );
-        let percent =
-            (max_.0.1[self.index_max] - min_.0.1[self.index_min]) / max_.0.1[self.index_max];
+        let percent = (max_.0.1[self.index_max] - min_.0.1[self.index_min]) / max_.0.1[self.index_max];
         if percent >= self.tp_th && percent <= self.tp_limit {
             if self.min_distance <= (min_.0.0.max(max_.0.0) - max_.0.0.min(min_.0.0)) {
                 let res = min_by_key(max_, min_, |v1| v1.0.0);
