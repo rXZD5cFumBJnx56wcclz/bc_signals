@@ -3,7 +3,7 @@ use bc_utils::other::roll_slice1;
 use crate::ready::ready_imports::*;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct PEAK {
+pub struct PUMPDUMP {
     pub th_min: f64,
     pub th_max: f64,
     pub limit: f64,
@@ -18,7 +18,7 @@ pub struct PEAK {
     pub add_window_accuracy: usize,
 }
 
-impl PEAK {
+impl PUMPDUMP {
     pub fn new(
         th_min: f64,
         th_max: f64,
@@ -36,7 +36,7 @@ impl PEAK {
             index_normal,
             signal_hold: 0.0,
             signal_short: -1.0,
-            signal_long: 1.0,
+            signal_long: 1.0, 
             window: 1,
             mult_window_accuracy: 1,
             add_window_accuracy: 1,
@@ -77,13 +77,13 @@ impl PEAK {
     }
 }
 
-impl Default for PEAK {
+impl Default for PUMPDUMP {
     fn default() -> Self {
-        PEAK::new(0.03, 0.03, 0.15, 0, 0, 0)
+        PUMPDUMP::new(0.03, 0.03, 0.15, 0, 0, 0)
     }
 }
 
-impl SignalsReady for PEAK {
+impl SignalsReady for PUMPDUMP {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -130,4 +130,4 @@ impl SignalsReady for PEAK {
     }
 }
 
-impl SignalsReadyExt for PEAK {}
+impl SignalsReadyExt for PUMPDUMP {}

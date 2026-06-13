@@ -1,7 +1,7 @@
 use std::sync::LazyLock;
 
 use bc_signals::ready::invert::*;
-use bc_signals::ready::peak::*;
+use bc_signals::ready::pumpdump::*;
 use bc_signals::ready::ready_imports::*;
 use bc_utils_lg::statics::prices::SRC_NOMAP;
 
@@ -11,7 +11,7 @@ static SIGNAL: LazyLock<INVERT> = LazyLock::new(|| INVERT::new());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| SRC_NOMAP.clone());
 const RES: LazyLock<Signal> = LazyLock::new(|| Signal::new(-1.0, 1.0));
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
-    PEAK::new(0.0001, 0.0001, 1.0, 0, 0, 0)
+    PUMPDUMP::new(0.0001, 0.0001, 1.0, 0, 0, 0)
         .signals_vec(&*SRC, &vec![])
         .into_iter()
         .map(|s| vec![s])
