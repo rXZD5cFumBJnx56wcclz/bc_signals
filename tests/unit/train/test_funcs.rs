@@ -6,16 +6,19 @@ where
     T: SignalsTrain,
     T: SignalsTrainExt,
 {
+    let len_sub_in = in_.len().checked_sub(1).unwrap_or_default();
+    let len_sub_signals = signals.len().checked_sub(1).unwrap_or_default();
     let bf = settings_signal.bf(
-        in_.into_iter()
-            .cloned()
-            .take(in_.len() - 1)
-            .collect::<Vec<Vec<f64>>>()
-            .as_slice(),
-        signals,
+        in_.get(..len_sub_in).unwrap_or_default(),
+        signals.get(..len_sub_signals).unwrap_or_default(),
     );
     assert_eq!(
-        settings_signal.signal_with_bf(in_.last().unwrap(), &signals[in_.len() - 1], &bf, 0),
+        settings_signal.signal_with_bf(
+            in_.last().unwrap_or(&vec![0.0]),
+            &signals.get(len_sub_signals).unwrap_or(&vec![]),
+            &bf,
+            0
+        ),
         eq,
     );
 }
@@ -39,8 +42,13 @@ pub fn test_coll_res_1<T>(
     T: SignalsTrainExt,
 {
     assert_eq!(
-        dbg!(settings_signal.signal_coll::<Vec<_>>(&in_[in_.len() - len_elements..], signals,))
-            [len_elements - 1 - settings_signal.w()],
+        dbg!(
+            settings_signal.signal_coll::<Vec<_>>(
+                &in_.get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
+                    .unwrap_or_default(),
+                signals,
+            )
+        )[len_elements - 1 - settings_signal.w()],
         eq,
     );
 }
@@ -53,7 +61,9 @@ pub fn test_coll_res_2<T>(
 ) where
     T: SignalsTrainExt,
 {
-    let in_ = &in_[in_.len() - len_elements..];
+    let in_ = &in_
+        .get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
+        .unwrap_or_default();
     assert_eq!(
         settings_signal.signal_coll::<Vec<_>>(in_, signals,)
             [len_elements - 1 - settings_signal.w()],
@@ -67,7 +77,7 @@ where
     T: SignalsTrainExt,
 {
     assert_eq!(
-        coll_nz::<Vec<f64>, f64, _>(&settings_signal.signal_coll::<Vec<_>>(&in_, signals,), 0.),
-        coll_nz::<Vec<f64>, f64, _>(&eq, 0.),
+        coll_nz::<Vec<f64>, f64, _>(&settings_signal.signals_vec(in_, signals), 0.0),
+        coll_nz::<Vec<f64>, f64, _>(&eq, 0.0),
     );
 }
