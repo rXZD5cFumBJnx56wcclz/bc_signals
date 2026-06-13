@@ -12,7 +12,7 @@ static SIGNALS: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| {
         .map(|v| vec![v as f64])
         .collect::<Vec<Vec<f64>>>()
 });
-static SIGNAL: LazyLock<MM> = LazyLock::new(|| MM::new(0, 0, 2, 3, 0.0001, 0.01));
+static SIGNAL: LazyLock<MM> = LazyLock::new(|| MM::new(0, 0, 2, 3, 0.0001, 0.01, 0.0, 1.0, 2.0));
 
 #[test]
 fn mm_with_bf_res_1() {

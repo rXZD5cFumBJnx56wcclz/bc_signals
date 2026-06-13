@@ -1,24 +1,20 @@
 use bc_signals::ready::ready_imports::*;
-// use bc_utils::nums::coll_nz;
 
 pub fn test_bf_res_1<T>(settings_signal: &T, in_: &[Vec<f64>], signals: &[Vec<Signal>], eq: Signal)
 where
     T: SignalsReady,
     T: SignalsReadyExt,
 {
+    let len_sub_in = in_.len().checked_sub(1).unwrap_or_default();
+    let len_sub_signals = signals.len().checked_sub(1).unwrap_or_default();
     let bf = settings_signal.bf(
-        in_.into_iter()
-            .cloned()
-            .take(in_.len() - 1)
-            .collect::<Vec<Vec<f64>>>()
-            .as_slice(),
-        signals,
+        in_.get(..len_sub_in).unwrap_or_default(),
+        signals.get(..len_sub_signals).unwrap_or_default(),
     );
-    dbg!(&bf, signals.len());
     assert_eq!(
         settings_signal.signal_with_bf(
-            in_.last().unwrap(),
-            &signals.get(in_.len() - 1).unwrap_or(&vec![]),
+            in_.last().unwrap_or(&vec![0.0]),
+            &signals.get(len_sub_signals).unwrap_or(&vec![]),
             &bf,
             0
         ),
@@ -45,8 +41,13 @@ pub fn test_coll_res_1<T>(
     T: SignalsReadyExt,
 {
     assert_eq!(
-        dbg!(settings_signal.signal_coll::<Vec<_>>(&in_[in_.len() - len_elements..], signals,))
-            [len_elements - 1],
+        dbg!(
+            settings_signal.signal_coll::<Vec<_>>(
+                &in_.get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
+                    .unwrap_or_default(),
+                signals,
+            )
+        )[len_elements - 1],
         eq,
     );
 }
@@ -59,7 +60,9 @@ pub fn test_coll_res_2<T>(
 ) where
     T: SignalsReadyExt,
 {
-    let in_ = &in_[in_.len() - len_elements..];
+    let in_ = &in_
+        .get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
+        .unwrap_or_default();
     assert_eq!(
         settings_signal.signal_coll::<Vec<_>>(in_, signals,)[len_elements - 1],
         settings_signal.signal(in_, signals,),

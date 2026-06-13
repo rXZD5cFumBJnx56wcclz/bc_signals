@@ -14,7 +14,6 @@ where
             .as_slice(),
         signals,
     );
-    dbg!(&bf);
     assert_eq!(
         settings_signal.signal_with_bf(in_.last().unwrap(), &signals[in_.len() - 1], &bf, 0),
         eq,

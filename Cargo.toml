@@ -6,7 +6,7 @@ edition = "2024"
 [dependencies]
 bc_utils_lg ={ path = "../bc_utils_lg" }
 bc_utils = {path = "../bc_utils"}
-# bc_indicators = {path = "../bc_indicators"}
+bc_indicators = {path = "../bc_indicators"}
 
 # ndarray = "0.15"
 # burn = {version = "0.18", features = ["wgpu"]}

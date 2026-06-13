@@ -2,6 +2,8 @@ use std::{any::Any, cell::RefCell};
 
 use bc_utils_lg::types::maps::MAP;
 
+type SignalsTrainType = Vec<f64>;
+
 fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>], signals: &[Vec<f64>]) -> C
 where
     C: FromIterator<f64>,
@@ -50,5 +52,19 @@ pub trait SignalsTrainExt: SignalsTrain {
         C: FromIterator<f64>,
     {
         signal_coll(self, src, signals)
+    }
+}
+
+pub trait SignalsTrainTo {
+    fn to_i32(self) -> Vec<i32>;
+    fn to_i64(self) -> Vec<i64>;
+}
+
+impl SignalsTrainTo for SignalsTrainType {
+    fn to_i32(self) -> Vec<i32> {
+        self.into_iter().map(|v| v as i32).collect()
+    }
+    fn to_i64(self) -> Vec<i64> {
+        self.into_iter().map(|v| v as i64).collect()
     }
 }

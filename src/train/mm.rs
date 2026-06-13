@@ -12,6 +12,9 @@ pub struct MM {
     pub max_distance: usize,
     pub tp_th: f64,
     pub tp_limit: f64,
+    pub signal_hold: f64,
+    pub signal_short: f64,
+    pub signal_long: f64,
     pub window: usize,
     pub mult_window_accuracy: usize,
     pub add_window_accuracy: usize,
@@ -25,6 +28,9 @@ impl MM {
         max_distance: usize,
         tp_th: f64,
         tp_limit: f64,
+        signal_hold: f64,
+        signal_short: f64,
+        signal_long: f64,
     ) -> Self {
         Self {
             window: max_distance,
@@ -36,6 +42,9 @@ impl MM {
             max_distance,
             tp_th,
             tp_limit,
+            signal_hold,
+            signal_short,
+            signal_long,
         }
     }
     pub fn set_window(&mut self, window: usize) {
@@ -46,6 +55,15 @@ impl MM {
     }
     pub fn set_add_window_accuracy(&mut self, add_window_accuracy: usize) {
         self.add_window_accuracy = add_window_accuracy;
+    }
+    pub fn set_signal_hold(&mut self, signal_hold: f64) {
+        self.signal_hold = signal_hold;
+    }
+    pub fn set_signal_short(&mut self, signal_short: f64) {
+        self.signal_short = signal_short;
+    }
+    pub fn set_signal_long(&mut self, signal_long: f64) {
+        self.signal_long = signal_long;
     }
     pub fn set_index_min(&mut self, index_min: usize) {
         self.index_min = index_min;
@@ -69,7 +87,7 @@ impl MM {
 
 impl Default for MM {
     fn default() -> Self {
-        MM::new(0, 0, 10, 60, 0.03, 0.05)
+        MM::new(0, 0, 10, 60, 0.03, 0.05, 0.0, -1.0, 1.0)
     }
 }
 
@@ -119,7 +137,7 @@ impl SignalsTrain for MM {
                         .unwrap_or(Equal)
                 })
                 .unwrap_or_default(),
-            2.0,
+            self.signal_long,
         );
         let max_ = (
             v.clone()
@@ -129,7 +147,7 @@ impl SignalsTrain for MM {
                         .unwrap_or(Equal)
                 })
                 .unwrap_or_default(),
-            1.0,
+            self.signal_short,
         );
         let percent =
             (max_.0.1[self.index_max] - min_.0.1[self.index_min]) / max_.0.1[self.index_max];
@@ -139,11 +157,11 @@ impl SignalsTrain for MM {
                 if res.0.0 == 0 {
                     return res.1;
                 }
-                return 0.0;
+                return self.signal_hold;
             }
-            return 0.0;
+            return self.signal_hold;
         }
-        0.0
+        self.signal_hold
     }
 }
 

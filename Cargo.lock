@@ -9,9 +9,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 
 [[package]]
+name = "bc_indicators"
+version = "0.1.0"
+dependencies = [
+ "bc_utils",
+ "bc_utils_lg",
+ "rustc-hash",
+]
+
+[[package]]
 name = "bc_signals"
 version = "0.1.0"
 dependencies = [
+ "bc_indicators",
  "bc_utils",
  "bc_utils_lg",
 ]

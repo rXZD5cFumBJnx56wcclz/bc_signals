@@ -10,6 +10,9 @@ pub struct PEAK {
     pub index_min: usize,
     pub index_max: usize,
     pub index_normal: usize,
+    pub signal_hold: f64,
+    pub signal_short: f64,
+    pub signal_long: f64,
     pub window: usize,
     pub mult_window_accuracy: usize,
     pub add_window_accuracy: usize,
@@ -31,6 +34,9 @@ impl PEAK {
             index_min,
             index_max,
             index_normal,
+            signal_hold: 0.0,
+            signal_short: -1.0,
+            signal_long: 1.0,
             window: 1,
             mult_window_accuracy: 1,
             add_window_accuracy: 1,
@@ -44,6 +50,15 @@ impl PEAK {
     }
     pub fn set_add_window_accuracy(&mut self, add_window_accuracy: usize) {
         self.add_window_accuracy = add_window_accuracy;
+    }
+    pub fn set_signal_hold(&mut self, signal_hold: f64) {
+        self.signal_hold = signal_hold;
+    }
+    pub fn set_signal_short(&mut self, signal_short: f64) {
+        self.signal_short = signal_short;
+    }
+    pub fn set_signal_long(&mut self, signal_long: f64) {
+        self.signal_long = signal_long;
     }
     pub fn set_index_min(&mut self, index_min: usize) {
         self.index_min = index_min;
