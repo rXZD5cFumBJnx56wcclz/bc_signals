@@ -46,47 +46,7 @@ fn invert_coll_res_3() {
         &SIGNALS,
         vec![
             Signal {
-                signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
                 signal: 1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 0.0,
                 probability: 1.0,
             },
             Signal {
@@ -106,14 +66,6 @@ fn invert_coll_res_3() {
                 probability: 1.0,
             },
             Signal {
-                signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 1.0,
-                probability: 1.0,
-            },
-            Signal {
                 signal: 1.0,
                 probability: 1.0,
             },
@@ -126,7 +78,15 @@ fn invert_coll_res_3() {
                 probability: 1.0,
             },
             Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
                 signal: 1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -0.0,
                 probability: 1.0,
             },
             Signal {
@@ -162,6 +122,74 @@ fn invert_coll_res_3() {
                 probability: 1.0,
             },
             Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: 1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: 1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: 1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: 1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: 1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -0.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -0.0,
+                probability: 1.0,
+            },
+            Signal {
                 signal: 1.0,
                 probability: 1.0,
             },
@@ -182,22 +210,6 @@ fn invert_coll_res_3() {
                 probability: 1.0,
             },
             Signal {
-                signal: 0.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 0.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
                 signal: 1.0,
                 probability: 1.0,
             },
@@ -210,7 +222,11 @@ fn invert_coll_res_3() {
                 probability: 1.0,
             },
             Signal {
-                signal: -1.0,
+                signal: 1.0,
+                probability: 1.0,
+            },
+            Signal {
+                signal: -0.0,
                 probability: 1.0,
             },
             Signal {
@@ -223,22 +239,6 @@ fn invert_coll_res_3() {
             },
             Signal {
                 signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 0.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: -1.0,
-                probability: 1.0,
-            },
-            Signal {
-                signal: 1.0,
                 probability: 1.0,
             },
         ],

@@ -32,13 +32,12 @@ where
     let w = signal_struct.w() - 1;
     let bf = signal_struct.bf(&src[..w], signals.get(..w).unwrap_or_default());
     src.iter()
-        .zip(signals)
         .enumerate()
-        .map(|(i, (v, signal))| {
+        .map(|(i, v)| {
             if i < w {
                 Signal::new(f64::NAN, 1.0)
             } else {
-                signal_struct.signal_with_bf(v, signal, &bf, 0)
+                signal_struct.signal_with_bf(v, signals.get(i).unwrap_or(&vec![]), &bf, 0)
             }
         })
         .collect()

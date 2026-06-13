@@ -14,9 +14,14 @@ where
             .as_slice(),
         signals,
     );
-    dbg!(&bf);
+    dbg!(&bf, signals.len());
     assert_eq!(
-        settings_signal.signal_with_bf(in_.last().unwrap(), &signals.get(in_.len() - 1).unwrap_or(&vec![]), &bf, 0),
+        settings_signal.signal_with_bf(
+            in_.last().unwrap(),
+            &signals.get(in_.len() - 1).unwrap_or(&vec![]),
+            &bf,
+            0
+        ),
         eq,
     );
 }
