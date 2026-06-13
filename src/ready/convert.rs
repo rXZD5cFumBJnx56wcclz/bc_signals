@@ -45,15 +45,12 @@ impl SignalsReady for CONVERT {
     }
     fn signal_with_bf(
         &self,
-        _: &[f64],
-        signals: &[Signal],
+        src: &[f64],
+        _: &[Signal],
         _: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
         _: usize,
     ) -> Signal {
-        if signals.iter().all(|s| s == &signals[0]) {
-            return signals[0].clone();
-        }
-        Default::default()
+        Signal::new(src[0], src[1])
     }
 }
 

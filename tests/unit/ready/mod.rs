@@ -1,4 +1,5 @@
 pub mod change;
+pub mod convert;
 pub mod filter;
 pub mod invert;
 pub mod osc_mult;

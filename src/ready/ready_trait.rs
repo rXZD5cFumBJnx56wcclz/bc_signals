@@ -90,7 +90,7 @@ pub trait SignalsReady: Any {
         }
         self.signal_with_bf(
             src.last().unwrap_or(&vec![]),
-            &signals[len_sub_one_signals],
+            signals.last().unwrap_or(&vec![Signal::default()]),
             &bf,
             0,
         )

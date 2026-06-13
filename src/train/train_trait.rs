@@ -53,15 +53,15 @@ pub trait SignalsTrain: Any {
         index_: usize,
     ) -> f64;
     fn signal(&self, src: &[Vec<f64>], signals: &[Vec<f64>]) -> f64 {
-        let len_sub_one_signal = signals.len().checked_sub(1).unwrap_or_default();
-        let len_sub_one_src = src.len().checked_sub(1).unwrap_or_default();
         let bf = self.bf(
-            &src[src.len().checked_sub(self.w()).unwrap_or_default()..len_sub_one_src],
-            &signals[signals.len().checked_sub(self.w()).unwrap_or_default()..len_sub_one_signal],
+            &src[src.len().checked_sub(self.w()).unwrap_or_default()
+                ..src.len().checked_sub(1).unwrap_or_default()],
+            &signals[signals.len().checked_sub(self.w()).unwrap_or_default()
+                ..signals.len().checked_sub(1).unwrap_or_default()],
         );
         self.signal_with_bf(
             src.last().unwrap_or(&vec![]),
-            signals.get(len_sub_one_signal).unwrap_or(&vec![]),
+            signals.last().unwrap_or(&vec![]),
             &bf,
             0,
         )
