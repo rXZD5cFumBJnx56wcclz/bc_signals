@@ -1,7 +1,5 @@
 use std::cmp::{Ordering::Equal, min_by_key};
 
-use bc_utils::other::roll_slice1;
-
 use crate::train::ready_imports::*;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -100,10 +98,7 @@ impl SignalsTrain for MM {
         src: &[Vec<f64>],
         _: &[Vec<f64>],
     ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
-        RefCell::new(vec![MAP::from_iter([(
-            "src_l_vec",
-            src[src.len() - (self.w() - 1)..].to_vec(),
-        )])])
+        <BF as BfExt>::new([("src_l_vec", src[src.len() - (self.w() - 1)..].to_vec())])
     }
     fn signal_with_bf(
         &self,
@@ -112,21 +107,7 @@ impl SignalsTrain for MM {
         bf: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
         index_: usize,
     ) -> f64 {
-        roll_slice1(
-            bf.borrow_mut()
-                .get_mut(index_)
-                .unwrap()
-                .get_mut("src_l_vec")
-                .unwrap()
-                .as_mut_slice(),
-            &-1,
-        );
-        bf.borrow_mut()
-            .get_mut(index_)
-            .unwrap()
-            .get_mut("src_l_vec")
-            .unwrap()
-            .as_mut_slice()[self.window - 1] = src.to_vec();
+        bf.roll_and_replace(-1, index_, "src_l_vec", src.to_vec());
         let bind = bf.borrow();
         let v = bind[index_]["src_l_vec"].iter().cloned().enumerate();
         let min_ = (

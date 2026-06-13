@@ -1,5 +1,3 @@
-use bc_utils::other::roll_slice1;
-
 use crate::ready::ready_imports::*;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -92,10 +90,7 @@ impl SignalsReady for PUMPDUMP {
         src: &[Vec<f64>],
         _: &[Vec<Signal>],
     ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
-        RefCell::new(vec![MAP::from_iter([(
-            "src_l",
-            vec![src[src.len() - 1].to_vec()],
-        )])])
+        <BF as BfExt>::new([("src_l", vec![src[src.len() - 1].to_vec()])])
     }
     fn signal_with_bf(
         &self,
@@ -107,18 +102,7 @@ impl SignalsReady for PUMPDUMP {
         let src_l = bf.borrow()[index_]["src_l"][0].clone();
         let perc_min = (src[self.index_normal] - src_l[self.index_min]) / src_l[self.index_normal];
         let perc_max = (src[self.index_normal] - src_l[self.index_max]) / src_l[self.index_normal];
-        roll_slice1(
-            bf.borrow_mut()
-                .get_mut(index_)
-                .unwrap()
-                .get_mut("src_l")
-                .unwrap(),
-            &-1,
-        );
-        bf.borrow_mut()
-            .get_mut(index_)
-            .unwrap()
-            .insert("src_l", vec![src.to_vec()]);
+        bf.roll_and_replace(-1, index_, "src_l", src.to_vec());
         if perc_min.abs() >= self.th_min && perc_max.abs() >= self.th_max {
             if perc_min > 0. {
                 return Signal::new(1.0, 1.0);

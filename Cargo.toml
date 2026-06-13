@@ -10,3 +10,42 @@ bc_indicators = {path = "../bc_indicators"}
 
 # ndarray = "0.15"
 # burn = {version = "0.18", features = ["wgpu"]}
+
+[dev-dependencies]
+criterion = {version = "0.8", features = ["html_reports"]}
+
+[[bench]]
+name = "change"
+harness = false
+path = "benches/ready/change.rs"
+
+[[bench]]
+name = "convert"
+harness = false
+path = "benches/ready/convert.rs"
+
+ [[bench]]
+name = "filter"
+harness = false
+path = "benches/ready/filter.rs"
+
+ [[bench]]
+name = "invert"
+harness = false
+path = "benches/ready/invert.rs"
+
+ [[bench]]
+name = "osc_mult"
+harness = false
+path = "benches/ready/osc_mult.rs"
+
+ [[bench]]
+name = "pumpdump"
+harness = false
+path = "benches/ready/pumpdump.rs"
+
+
+[[bench]]
+name = "mm"
+harness = false
+path = "benches/train/mm.rs"

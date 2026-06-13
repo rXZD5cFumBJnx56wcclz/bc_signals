@@ -41,10 +41,7 @@ impl SignalsReady for CHANGE {
         _: &[Vec<f64>],
         signals: &[Vec<Signal>],
     ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
-        RefCell::new(vec![MAP::from_iter([(
-            "signal_l",
-            vec![vec![signals[signals.len() - 1][0].signal]],
-        )])])
+        <BF as BfExt>::new([("signal_l", vec![vec![signals[signals.len() - 1][0].signal]])])
     }
     fn signal_with_bf(
         &self,
@@ -55,10 +52,7 @@ impl SignalsReady for CHANGE {
     ) -> Signal {
         let signal = signals.get(0).expect("signal not found").clone();
         let part = signal.signal != bf.borrow()[0]["signal_l"][0][0];
-        bf.borrow_mut()
-            .get_mut(index_)
-            .unwrap()
-            .insert("signal_l", vec![vec![signal.signal]]);
+        <BF as BfExt>::insert(bf, index_, "signal_l", vec![vec![signal.signal]]);
         if part { signal } else { Default::default() }
     }
 }
