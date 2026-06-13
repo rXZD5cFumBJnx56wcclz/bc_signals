@@ -8,5 +8,5 @@ bc_utils_lg ={ path = "../bc_utils_lg" }
 bc_utils = {path = "../bc_utils"}
 # bc_indicators = {path = "../bc_indicators"}
 
-ndarray = "0.15"
-burn = {version = "0.18", features = ["wgpu"]}
+# ndarray = "0.15"
+# burn = {version = "0.18", features = ["wgpu"]}

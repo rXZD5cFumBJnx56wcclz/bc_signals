@@ -6,15 +6,15 @@ use crate::train::ready_imports::*;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct MM {
-    pub window: usize,
-    pub mult_window_accuracy: usize,
-    pub add_window_accuracy: usize,
     pub index_min: usize,
     pub index_max: usize,
     pub min_distance: usize,
     pub max_distance: usize,
     pub tp_th: f64,
     pub tp_limit: f64,
+    pub window: usize,
+    pub mult_window_accuracy: usize,
+    pub add_window_accuracy: usize,
 }
 
 impl MM {
@@ -29,7 +29,7 @@ impl MM {
         Self {
             window: max_distance,
             mult_window_accuracy: 1,
-            add_window_accuracy: 0,
+            add_window_accuracy: 1,
             index_min,
             index_max,
             min_distance,
@@ -73,20 +73,24 @@ impl Default for MM {
     }
 }
 
-impl TrainSignals for MM {
+impl SignalsTrain for MM {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
-    fn bf(&self, src: &[Vec<f64>]) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
+    fn bf(
+        &self,
+        src: &[Vec<f64>],
+        _: &[Vec<f64>],
+    ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
         RefCell::new(vec![MAP::from_iter([(
             "src_l_vec",
-            src[src.len() - self.w()..]
-                .to_vec(),
+            src[src.len() - (self.w() - 1)..].to_vec(),
         )])])
     }
     fn signal_with_bf(
         &self,
         src: &[f64],
+        _: &[f64],
         bf: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
         index_: usize,
     ) -> f64 {
@@ -109,17 +113,26 @@ impl TrainSignals for MM {
         let v = bind[index_]["src_l_vec"].iter().cloned().enumerate();
         let min_ = (
             v.clone()
-                .min_by(|v1, v2| v1.1[self.index_min].partial_cmp(&v2.1[self.index_min]).unwrap_or(Equal))
+                .min_by(|v1, v2| {
+                    v1.1[self.index_min]
+                        .partial_cmp(&v2.1[self.index_min])
+                        .unwrap_or(Equal)
+                })
                 .unwrap_or_default(),
             2.0,
         );
         let max_ = (
             v.clone()
-                .max_by(|v1, v2| v1.1[self.index_max].partial_cmp(&v2.1[self.index_max]).unwrap_or(Equal))
+                .max_by(|v1, v2| {
+                    v1.1[self.index_max]
+                        .partial_cmp(&v2.1[self.index_max])
+                        .unwrap_or(Equal)
+                })
                 .unwrap_or_default(),
             1.0,
         );
-        let percent = (max_.0.1[self.index_max] - min_.0.1[self.index_min]) / max_.0.1[self.index_max];
+        let percent =
+            (max_.0.1[self.index_max] - min_.0.1[self.index_min]) / max_.0.1[self.index_max];
         if percent >= self.tp_th && percent <= self.tp_limit {
             if self.min_distance <= (min_.0.0.max(max_.0.0) - max_.0.0.min(min_.0.0)) {
                 let res = min_by_key(max_, min_, |v1| v1.0.0);
@@ -134,4 +147,4 @@ impl TrainSignals for MM {
     }
 }
 
-impl TrainSignalsExt for MM {}
+impl SignalsTrainExt for MM {}
