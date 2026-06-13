@@ -29,7 +29,7 @@ where
     T: SignalsReady,
     T: ?Sized,
 {
-    let w = signal_struct.w() - 1;
+    let w = signal_struct.w().checked_sub(1).unwrap_or_default();
     let bf = signal_struct.bf(
         &src.get(..w).unwrap_or_default(),
         signals.get(..w).unwrap_or_default(),
@@ -77,11 +77,17 @@ pub trait SignalsReady: Any {
     ) -> Signal;
     fn signal(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> Signal {
         let len_sub_one_signals = signals.len().checked_sub(1).unwrap_or_default();
-        let bf = self.bf(
-            &src[src.len().checked_sub(self.w()).unwrap_or_default()
-                ..src.len().checked_sub(1).unwrap_or_default()],
-            &signals[signals.len().checked_sub(self.w()).unwrap_or_default()..len_sub_one_signals],
-        );
+        let bf;
+        if self.w() != 0 {
+            bf = self.bf(
+                &src[src.len().checked_sub(self.w()).unwrap_or_default()
+                    ..src.len().checked_sub(1).unwrap_or_default()],
+                &signals
+                    [signals.len().checked_sub(self.w()).unwrap_or_default()..len_sub_one_signals],
+            );
+        } else {
+            bf = Default::default();
+        }
         self.signal_with_bf(
             src.last().unwrap_or(&vec![]),
             &signals[len_sub_one_signals],

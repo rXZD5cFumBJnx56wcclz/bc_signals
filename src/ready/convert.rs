@@ -1,21 +1,15 @@
 use crate::ready::ready_imports::*;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct INVERT {
-    pub signal_hold: f64,
-    pub signal_short: f64,
-    pub signal_long: f64,
+pub struct CONVERT {
     pub window: usize,
     pub mult_window_accuracy: usize,
     pub add_window_accuracy: usize,
 }
 
-impl INVERT {
+impl CONVERT {
     pub fn new() -> Self {
         Self {
-            signal_hold: 0.0,
-            signal_short: -1.0,
-            signal_long: 1.0,
             window: 0,
             mult_window_accuracy: 0,
             add_window_accuracy: 0,
@@ -30,24 +24,15 @@ impl INVERT {
     pub fn set_add_window_accuracy(&mut self, add_window_accuracy: usize) {
         self.add_window_accuracy = add_window_accuracy;
     }
-    pub fn set_signal_hold(&mut self, signal_hold: f64) {
-        self.signal_hold = signal_hold;
-    }
-    pub fn set_signal_short(&mut self, signal_short: f64) {
-        self.signal_short = signal_short;
-    }
-    pub fn set_signal_long(&mut self, signal_long: f64) {
-        self.signal_long = signal_long;
-    }
 }
 
-impl Default for INVERT {
+impl Default for CONVERT {
     fn default() -> Self {
-        INVERT::new()
+        CONVERT::new()
     }
 }
 
-impl SignalsReady for INVERT {
+impl SignalsReady for CONVERT {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -65,14 +50,11 @@ impl SignalsReady for INVERT {
         _: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
         _: usize,
     ) -> Signal {
-        let mut signal = signals.get(0).expect("signal not found").clone();
-        if signal.signal == self.signal_short {
-            signal.signal = self.signal_long;
-        } else if signal.signal == self.signal_long {
-            signal.signal = self.signal_short;
+        if signals.iter().all(|s| s == &signals[0]) {
+            return signals[0].clone();
         }
-        signal
+        Default::default()
     }
 }
 
-impl SignalsReadyExt for INVERT {}
+impl SignalsReadyExt for CONVERT {}

@@ -36,7 +36,7 @@ impl PUMPDUMP {
             index_normal,
             signal_hold: 0.0,
             signal_short: -1.0,
-            signal_long: 1.0, 
+            signal_long: 1.0,
             window: 1,
             mult_window_accuracy: 1,
             add_window_accuracy: 1,
