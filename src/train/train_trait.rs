@@ -1,6 +1,6 @@
-use std::{any::Any, cell::RefCell};
+use std::any::Any;
 
-use bc_utils_lg::types::maps::MAP;
+use crate::def_impl::BF_SIGNALS;
 
 type SignalsTrainType = Vec<f64>;
 
@@ -40,16 +40,12 @@ where
 
 pub trait SignalsTrain: Any {
     fn w(&self) -> usize;
-    fn bf(
-        &self,
-        src: &[Vec<f64>],
-        signals: &[Vec<f64>],
-    ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>;
-    fn signal_with_bf(
+    fn bf<'a>(&self, src: &[Vec<f64>], signals: &[Vec<f64>]) -> BF_SIGNALS<'a>;
+    fn signal_with_bf<'a>(
         &self,
         src: &[f64],
         signals: &[f64],
-        bf: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
+        bf: &BF_SIGNALS<'a>,
         index_: usize,
     ) -> f64;
     fn signal(&self, src: &[Vec<f64>], signals: &[Vec<f64>]) -> f64 {

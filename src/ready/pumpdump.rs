@@ -58,6 +58,15 @@ impl PUMPDUMP {
     pub fn set_signal_long(&mut self, signal_long: f64) {
         self.signal_long = signal_long;
     }
+    pub fn set_th_min(&mut self, th_min: f64) {
+        self.th_min = th_min;
+    }
+    pub fn set_th_max(&mut self, th_max: f64) {
+        self.th_max = th_max;
+    }
+    pub fn set_limit(&mut self, limit: f64) {
+        self.limit = limit;
+    }
     pub fn set_index_min(&mut self, index_min: usize) {
         self.index_min = index_min;
     }
@@ -66,12 +75,6 @@ impl PUMPDUMP {
     }
     pub fn set_index_normal(&mut self, index_normal: usize) {
         self.index_normal = index_normal;
-    }
-    pub fn set_th_min(&mut self, th_min: f64) {
-        self.th_min = th_min;
-    }
-    pub fn set_th_max(&mut self, th_max: f64) {
-        self.th_max = th_max;
     }
 }
 
@@ -85,25 +88,22 @@ impl SignalsReady for PUMPDUMP {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
-    fn bf(
-        &self,
-        src: &[Vec<f64>],
-        _: &[Vec<Signal>],
-    ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
-        <BF as BfExt>::new([("src_l", vec![src[src.len() - 1].to_vec()])])
+    fn bf<'a>(&self, src: &[Vec<f64>], _: &[Vec<Signal>]) -> BF_SIGNALS<'a> {
+        <BF_SIGNALS as BfSignalsExt>::new([("src_l", vec![src[src.len() - 1].to_vec()])])
     }
-    fn signal_with_bf(
+    fn signal_with_bf<'a>(
         &self,
         src: &[f64],
         _: &[Signal],
-        bf: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
+        bf: &BF_SIGNALS<'a>,
         index_: usize,
     ) -> Signal {
         let src_l = bf.borrow()[index_]["src_l"][0].clone();
         let perc_min = (src[self.index_normal] - src_l[self.index_min]) / src_l[self.index_normal];
         let perc_max = (src[self.index_normal] - src_l[self.index_max]) / src_l[self.index_normal];
         bf.roll_and_replace(-1, index_, "src_l", src.to_vec());
-        if perc_min.abs() >= self.th_min && perc_max.abs() >= self.th_max {
+        let perc = perc_min.abs() + perc_max.abs();
+        if perc >= self.th_min + self.th_max && perc <= self.limit * 2. {
             if perc_min > 0. {
                 return Signal::new(1.0, 1.0);
             } else if perc_max < 0. {

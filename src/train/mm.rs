@@ -93,18 +93,17 @@ impl SignalsTrain for MM {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
-    fn bf(
-        &self,
-        src: &[Vec<f64>],
-        _: &[Vec<f64>],
-    ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
-        <BF as BfExt>::new([("src_l_vec", src[src.len() - (self.w() - 1)..].to_vec())])
+    fn bf<'a>(&self, src: &[Vec<f64>], _: &[Vec<f64>]) -> BF_SIGNALS<'a> {
+        <BF_SIGNALS as BfSignalsExt>::new([(
+            "src_l_vec",
+            src[src.len() - (self.w() - 1)..].to_vec(),
+        )])
     }
-    fn signal_with_bf(
+    fn signal_with_bf<'a>(
         &self,
         src: &[f64],
         _: &[f64],
-        bf: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
+        bf: &BF_SIGNALS<'a>,
         index_: usize,
     ) -> f64 {
         bf.roll_and_replace(-1, index_, "src_l_vec", src.to_vec());

@@ -12,17 +12,17 @@ static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| Default::default()
 
 #[test]
 fn convert_with_bf_res_1() {
-    test_bf_res_1(&*SIGNAL, &SRC, &SIGNALS, RES.clone());
+    test_bf_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
 }
 
 #[test]
 fn convert_signal_res_1() {
-    test_f_res_1(&*SIGNAL, &SRC, &SIGNALS, RES.clone());
+    test_f_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
 }
 
 #[test]
 fn convert_coll_res_1() {
-    test_coll_res_1(&*SIGNAL, &SRC, &SIGNALS, RES.clone(), 2);
+    test_coll_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES, 2);
 }
 
 #[test]

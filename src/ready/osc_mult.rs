@@ -55,21 +55,17 @@ impl SignalsReady for OSC_MULT {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
-    fn bf(
-        &self,
-        _: &[Vec<f64>],
-        _: &[Vec<Signal>],
-    ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
+    fn bf<'a>(&self, _: &[Vec<f64>], _: &[Vec<Signal>]) -> BF_SIGNALS<'a> {
         Default::default()
     }
-    fn signal_with_bf(
+    fn signal_with_bf<'a>(
         &self,
         src: &[f64],
         signals: &[Signal],
-        _: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
+        _: &BF_SIGNALS<'a>,
         _: usize,
     ) -> Signal {
-        let mut signal = signals[0].clone();
+        let mut signal = signals[0];
         signal.probability = IND::new(self.th_short, self.th_long, self.max_value).ind(src);
         signal
     }

@@ -36,22 +36,18 @@ impl SignalsReady for FILTER {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
-    fn bf(
-        &self,
-        _: &[Vec<f64>],
-        _: &[Vec<Signal>],
-    ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
+    fn bf<'a>(&self, _: &[Vec<f64>], _: &[Vec<Signal>]) -> BF_SIGNALS<'a> {
         Default::default()
     }
-    fn signal_with_bf(
+    fn signal_with_bf<'a>(
         &self,
         _: &[f64],
         signals: &[Signal],
-        _: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
+        _: &BF_SIGNALS<'a>,
         _: usize,
     ) -> Signal {
         if signals.iter().all(|s| s == &signals[0]) {
-            return signals[0].clone();
+            return signals[0];
         }
         Default::default()
     }

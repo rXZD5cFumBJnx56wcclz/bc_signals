@@ -17,17 +17,17 @@ static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
 
 #[test]
 fn pumpdump_with_bf_res_1() {
-    test_bf_res_1(&*SIGNAL, &SRC, &SIGNALS, RES.clone());
+    test_bf_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
 }
 
 #[test]
 fn pumpdump_signal_res_1() {
-    test_f_res_1(&*SIGNAL, &SRC, &SIGNALS, RES.clone());
+    test_f_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
 }
 
 #[test]
 fn pumpdump_coll_res_1() {
-    test_coll_res_1(&*SIGNAL, &SRC, &SIGNALS, RES.clone(), 30);
+    test_coll_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES, 30);
 }
 
 #[test]

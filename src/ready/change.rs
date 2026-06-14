@@ -36,23 +36,22 @@ impl SignalsReady for CHANGE {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
-    fn bf(
-        &self,
-        _: &[Vec<f64>],
-        signals: &[Vec<Signal>],
-    ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>> {
-        <BF as BfExt>::new([("signal_l", vec![vec![signals[signals.len() - 1][0].signal]])])
+    fn bf<'a>(&self, _: &[Vec<f64>], signals: &[Vec<Signal>]) -> BF_SIGNALS<'a> {
+        <BF_SIGNALS as BfSignalsExt>::new([(
+            "signal_l",
+            vec![vec![signals[signals.len() - 1][0].signal]],
+        )])
     }
-    fn signal_with_bf(
+    fn signal_with_bf<'a>(
         &self,
         _: &[f64],
         signals: &[Signal],
-        bf: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
+        bf: &BF_SIGNALS<'a>,
         index_: usize,
     ) -> Signal {
-        let signal = signals.get(0).expect("signal not found").clone();
+        let signal = *signals.get(0).expect("signal not found");
         let part = signal.signal != bf.borrow()[0]["signal_l"][0][0];
-        <BF as BfExt>::insert(bf, index_, "signal_l", vec![vec![signal.signal]]);
+        <BF_SIGNALS as BfSignalsExt>::insert(bf, index_, "signal_l", vec![vec![signal.signal]]);
         if part { signal } else { Default::default() }
     }
 }

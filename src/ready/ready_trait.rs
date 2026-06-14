@@ -1,8 +1,8 @@
-use std::{any::Any, cell::RefCell};
+use std::any::Any;
 
-use bc_utils_lg::types::maps::MAP;
+use crate::def_impl::BF_SIGNALS;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Signal {
     pub signal: f64,
     pub probability: f64,
@@ -63,16 +63,12 @@ where
 
 pub trait SignalsReady: Any {
     fn w(&self) -> usize;
-    fn bf(
-        &self,
-        src: &[Vec<f64>],
-        signals: &[Vec<Signal>],
-    ) -> RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>;
-    fn signal_with_bf(
+    fn bf<'a>(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> BF_SIGNALS<'a>;
+    fn signal_with_bf<'a>(
         &self,
         src: &[f64],
         signals: &[Signal],
-        bf: &RefCell<Vec<MAP<&'static str, Vec<Vec<f64>>>>>,
+        bf: &BF_SIGNALS<'a>,
         index_: usize,
     ) -> Signal;
     fn signal(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> Signal {
