@@ -6,7 +6,6 @@ edition = "2024"
 [dependencies]
 bc_utils_lg ={ path = "../bc_utils_lg" }
 bc_utils = {path = "../bc_utils"}
-bc_indicators = {path = "../bc_indicators"}
 
 # ndarray = "0.15"
 # burn = {version = "0.18", features = ["wgpu"]}
@@ -35,9 +34,9 @@ harness = false
 path = "benches/ready/invert.rs"
 
  [[bench]]
-name = "osc_mult"
+name = "set_probability"
 harness = false
-path = "benches/ready/osc_mult.rs"
+path = "benches/ready/set_probability.rs"
 
  [[bench]]
 name = "pumpdump"
