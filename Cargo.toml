@@ -54,6 +54,11 @@ harness = false
 path = "benches/ready/copy.rs"
 
 [[bench]]
+name = "repeat"
+harness = false
+path = "benches/ready/repeat.rs"
+
+[[bench]]
 name = "mm"
 harness = false
 path = "benches/train/mm.rs"

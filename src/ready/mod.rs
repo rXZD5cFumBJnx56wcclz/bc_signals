@@ -7,4 +7,5 @@ pub mod invert;
 pub mod pumpdump;
 pub mod ready_imports;
 pub mod ready_trait;
+pub mod repeat;
 pub mod set_probability;
