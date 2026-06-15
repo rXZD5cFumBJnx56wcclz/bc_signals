@@ -34,6 +34,15 @@ impl CHANGE_SRC {
     pub fn set_add_window_accuracy(&mut self, add_window_accuracy: usize) {
         self.add_window_accuracy = add_window_accuracy;
     }
+    pub fn set_signal_short(&mut self, signal_short: f64) {
+        self.signal_short = signal_short;
+    }
+    pub fn set_signal_long(&mut self, signal_long: f64) {
+        self.signal_long = signal_long;
+    }
+    pub fn set_signal_hold(&mut self, signal_hold: f64) {
+        self.signal_hold = signal_hold;
+    }
 }
 
 impl Default for CHANGE_SRC {
