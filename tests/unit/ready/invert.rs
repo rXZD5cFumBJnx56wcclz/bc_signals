@@ -7,7 +7,7 @@ use bc_utils_lg::statics::prices::SRC_NOMAP;
 
 use crate::unit::ready::test_funcs::*;
 
-static SIGNAL: LazyLock<INVERT> = LazyLock::new(|| INVERT::new());
+static SIGNAL: LazyLock<INVERT> = LazyLock::new(|| INVERT::default());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| SRC_NOMAP.clone());
 const RES: LazyLock<Signal> = LazyLock::new(|| Signal::new(-1.0, 1.0));
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {

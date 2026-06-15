@@ -7,7 +7,7 @@ use std::sync::LazyLock;
 use bc_signals::ready::invert::*;
 use bc_signals::ready::ready_imports::*;
 
-static SIGNAL: LazyLock<INVERT> = LazyLock::new(|| INVERT::new());
+static SIGNAL: LazyLock<INVERT> = LazyLock::new(|| INVERT::default());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| SRC_NOMAP.clone());
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
     PUMPDUMP::new(0.0001, 0.0001, 1.0, 0, 0, 0)

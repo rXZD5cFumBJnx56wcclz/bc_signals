@@ -11,11 +11,11 @@ pub struct INVERT {
 }
 
 impl INVERT {
-    pub fn new() -> Self {
+    pub fn new(signal_hold: f64, signal_short: f64, signal_long: f64) -> Self {
         Self {
-            signal_hold: 0.0,
-            signal_short: -1.0,
-            signal_long: 1.0,
+            signal_hold: signal_hold,
+            signal_short: signal_short,
+            signal_long: signal_long,
             window: 0,
             mult_window_accuracy: 0,
             add_window_accuracy: 0,
@@ -43,7 +43,7 @@ impl INVERT {
 
 impl Default for INVERT {
     fn default() -> Self {
-        INVERT::new()
+        INVERT::new(0., -1., 1.)
     }
 }
 
