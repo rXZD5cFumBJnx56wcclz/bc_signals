@@ -43,6 +43,10 @@ name = "pumpdump"
 harness = false
 path = "benches/ready/pumpdump.rs"
 
+[[bench]]
+name = "copy"
+harness = false
+path = "benches/ready/copy.rs"
 
 [[bench]]
 name = "mm"
