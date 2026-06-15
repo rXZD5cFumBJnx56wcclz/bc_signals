@@ -7,7 +7,6 @@ pub struct MM {
     pub index_min: usize,
     pub index_max: usize,
     pub min_distance: usize,
-    pub max_distance: usize,
     pub tp_th: f64,
     pub tp_limit: f64,
     pub signal_hold: f64,
@@ -23,7 +22,7 @@ impl MM {
         index_min: usize,
         index_max: usize,
         min_distance: usize,
-        max_distance: usize,
+        window: usize,
         tp_th: f64,
         tp_limit: f64,
         signal_hold: f64,
@@ -31,13 +30,12 @@ impl MM {
         signal_long: f64,
     ) -> Self {
         Self {
-            window: max_distance,
+            window: window,
             mult_window_accuracy: 1,
             add_window_accuracy: 1,
             index_min,
             index_max,
             min_distance,
-            max_distance,
             tp_th,
             tp_limit,
             signal_hold,
@@ -71,9 +69,6 @@ impl MM {
     }
     pub fn set_min_distance(&mut self, min_distance: usize) {
         self.min_distance = min_distance;
-    }
-    pub fn set_max_distance(&mut self, max_distance: usize) {
-        self.max_distance = max_distance;
     }
     pub fn set_tp_th(&mut self, tp_th: f64) {
         self.tp_th = tp_th;
