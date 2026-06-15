@@ -1,13 +1,15 @@
+#![allow(non_camel_case_types)]
+
 use crate::ready::ready_imports::*;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct CHANGE {
+pub struct CHANGE_SIGNAL {
     pub window: usize,
     pub mult_window_accuracy: usize,
     pub add_window_accuracy: usize,
 }
 
-impl CHANGE {
+impl CHANGE_SIGNAL {
     pub fn new() -> Self {
         Self {
             window: 0,
@@ -26,13 +28,13 @@ impl CHANGE {
     }
 }
 
-impl Default for CHANGE {
+impl Default for CHANGE_SIGNAL {
     fn default() -> Self {
-        CHANGE::new()
+        CHANGE_SIGNAL::new()
     }
 }
 
-impl SignalsReady for CHANGE {
+impl SignalsReady for CHANGE_SIGNAL {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -56,4 +58,4 @@ impl SignalsReady for CHANGE {
     }
 }
 
-impl SignalsReadyExt for CHANGE {}
+impl SignalsReadyExt for CHANGE_SIGNAL {}

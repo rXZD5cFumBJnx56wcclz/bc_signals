@@ -14,9 +14,14 @@ bc_utils = {path = "../bc_utils"}
 criterion = {version = "0.8", features = ["html_reports"]}
 
 [[bench]]
-name = "change"
+name = "change_signal"
 harness = false
-path = "benches/ready/change.rs"
+path = "benches/ready/change_signal.rs"
+
+[[bench]]
+name = "change_src"
+harness = false
+path = "benches/ready/change_src.rs"
 
 [[bench]]
 name = "convert"
