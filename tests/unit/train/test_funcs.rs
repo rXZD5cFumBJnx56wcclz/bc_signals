@@ -3,8 +3,8 @@ use bc_utils::nums::coll_nz;
 
 pub fn test_bf_res_1<T>(settings_signal: &T, in_: &[Vec<f64>], signals: &[Vec<f64>], eq: f64)
 where
-    T: SignalsTrain,
-    T: SignalsTrainExt,
+    T: SignalTrain,
+    T: SignalTrainExt,
 {
     let len_sub_in = in_.len().checked_sub(1).unwrap_or_default();
     let len_sub_signals = signals.len().checked_sub(1).unwrap_or_default();
@@ -25,8 +25,8 @@ where
 
 pub fn test_f_res_1<T>(settings_signal: &T, in_: &[Vec<f64>], signals: &[Vec<f64>], eq: f64)
 where
-    T: SignalsTrain,
-    T: SignalsTrainExt,
+    T: SignalTrain,
+    T: SignalTrainExt,
 {
     assert_eq!(settings_signal.signal(in_, signals,), eq,);
 }
@@ -38,8 +38,8 @@ pub fn test_coll_res_1<T>(
     eq: f64,
     len_elements: usize,
 ) where
-    T: SignalsTrain,
-    T: SignalsTrainExt,
+    T: SignalTrain,
+    T: SignalTrainExt,
 {
     assert_eq!(
         dbg!(
@@ -59,7 +59,7 @@ pub fn test_coll_res_2<T>(
     signals: &[Vec<f64>],
     len_elements: usize,
 ) where
-    T: SignalsTrainExt,
+    T: SignalTrainExt,
 {
     let in_ = &in_
         .get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
@@ -73,8 +73,8 @@ pub fn test_coll_res_2<T>(
 
 pub fn test_coll_res_3<T>(settings_signal: &T, in_: &[Vec<f64>], signals: &[Vec<f64>], eq: Vec<f64>)
 where
-    T: SignalsTrain,
-    T: SignalsTrainExt,
+    T: SignalTrain,
+    T: SignalTrainExt,
 {
     assert_eq!(
         coll_nz::<Vec<f64>, f64, _>(&settings_signal.signals_vec(in_, signals), 0.0),

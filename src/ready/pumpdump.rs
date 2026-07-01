@@ -84,7 +84,7 @@ impl Default for PUMPDUMP {
     }
 }
 
-impl SignalsReady for PUMPDUMP {
+impl SignalReady for PUMPDUMP {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -114,4 +114,4 @@ impl SignalsReady for PUMPDUMP {
     }
 }
 
-impl SignalsReadyExt for PUMPDUMP {}
+impl SignalReadyExt for PUMPDUMP {}

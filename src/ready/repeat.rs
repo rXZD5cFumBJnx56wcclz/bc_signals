@@ -42,7 +42,7 @@ impl Default for REPEAT {
     }
 }
 
-impl SignalsReady for REPEAT {
+impl SignalReady for REPEAT {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -54,4 +54,4 @@ impl SignalsReady for REPEAT {
     }
 }
 
-impl SignalsReadyExt for REPEAT {}
+impl SignalReadyExt for REPEAT {}

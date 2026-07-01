@@ -36,7 +36,7 @@ impl<'a> BfSignalsExt<'a> for BF_SIGNALS<'a> {
                 .get_mut(key)
                 .unwrap()
                 .as_mut_slice(),
-            &shift,
+            shift,
         );
         self.borrow_mut()
             .get_mut(index_)

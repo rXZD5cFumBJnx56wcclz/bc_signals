@@ -34,7 +34,7 @@ impl Default for SET_PROBABILITY {
     }
 }
 
-impl SignalsReady for SET_PROBABILITY {
+impl SignalReady for SET_PROBABILITY {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -54,4 +54,4 @@ impl SignalsReady for SET_PROBABILITY {
     }
 }
 
-impl SignalsReadyExt for SET_PROBABILITY {}
+impl SignalReadyExt for SET_PROBABILITY {}

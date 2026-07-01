@@ -47,7 +47,7 @@ impl Default for INVERT {
     }
 }
 
-impl SignalsReady for INVERT {
+impl SignalReady for INVERT {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -71,4 +71,4 @@ impl SignalsReady for INVERT {
     }
 }
 
-impl SignalsReadyExt for INVERT {}
+impl SignalReadyExt for INVERT {}

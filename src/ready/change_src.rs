@@ -51,7 +51,7 @@ impl Default for CHANGE_SRC {
     }
 }
 
-impl SignalsReady for CHANGE_SRC {
+impl SignalReady for CHANGE_SRC {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -76,4 +76,4 @@ impl SignalsReady for CHANGE_SRC {
     }
 }
 
-impl SignalsReadyExt for CHANGE_SRC {}
+impl SignalReadyExt for CHANGE_SRC {}

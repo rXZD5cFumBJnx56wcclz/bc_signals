@@ -34,7 +34,7 @@ impl Default for COPY {
     }
 }
 
-impl SignalsReady for COPY {
+impl SignalReady for COPY {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -52,4 +52,4 @@ impl SignalsReady for COPY {
     }
 }
 
-impl SignalsReadyExt for COPY {}
+impl SignalReadyExt for COPY {}

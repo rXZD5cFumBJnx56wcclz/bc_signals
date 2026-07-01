@@ -2,12 +2,12 @@ use std::any::Any;
 
 use crate::def_impl::BF_SIGNALS;
 
-type SignalsTrainType = Vec<f64>;
+type SignalTrainType = Vec<f64>;
 
 fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>], signals: &[Vec<f64>]) -> C
 where
     C: FromIterator<f64>,
-    T: SignalsTrain,
+    T: SignalTrain,
     T: ?Sized,
 {
     let w = signal_struct.w().checked_sub(1).unwrap_or_default();
@@ -38,7 +38,7 @@ where
     }
 }
 
-pub trait SignalsTrain: Any {
+pub trait SignalTrain: Any {
     fn w(&self) -> usize;
     fn bf<'a>(&self, src: &[Vec<f64>], signals: &[Vec<f64>]) -> BF_SIGNALS<'a>;
     fn signal_with_bf<'a>(
@@ -67,7 +67,7 @@ pub trait SignalsTrain: Any {
     }
 }
 
-pub trait SignalsTrainExt: SignalsTrain {
+pub trait SignalTrainExt: SignalTrain {
     fn signal_coll<C>(&self, src: &[Vec<f64>], signals: &[Vec<f64>]) -> C
     where
         C: FromIterator<f64>,
@@ -76,12 +76,12 @@ pub trait SignalsTrainExt: SignalsTrain {
     }
 }
 
-pub trait SignalsTrainTo {
+pub trait SignalTrainTo {
     fn to_i32(self) -> Vec<i32>;
     fn to_i64(self) -> Vec<i64>;
 }
 
-impl SignalsTrainTo for SignalsTrainType {
+impl SignalTrainTo for SignalTrainType {
     fn to_i32(self) -> Vec<i32> {
         self.into_iter().map(|v| v as i32).collect()
     }

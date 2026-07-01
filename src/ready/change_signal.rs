@@ -34,7 +34,7 @@ impl Default for CHANGE_SIGNAL {
     }
 }
 
-impl SignalsReady for CHANGE_SIGNAL {
+impl SignalReady for CHANGE_SIGNAL {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -58,4 +58,4 @@ impl SignalsReady for CHANGE_SIGNAL {
     }
 }
 
-impl SignalsReadyExt for CHANGE_SIGNAL {}
+impl SignalReadyExt for CHANGE_SIGNAL {}

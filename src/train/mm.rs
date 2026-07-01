@@ -84,7 +84,7 @@ impl Default for MM {
     }
 }
 
-impl SignalsTrain for MM {
+impl SignalTrain for MM {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -140,4 +140,4 @@ impl SignalsTrain for MM {
     }
 }
 
-impl SignalsTrainExt for MM {}
+impl SignalTrainExt for MM {}

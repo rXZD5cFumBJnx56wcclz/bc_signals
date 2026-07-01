@@ -32,7 +32,7 @@ impl Default for CONVERT {
     }
 }
 
-impl SignalsReady for CONVERT {
+impl SignalReady for CONVERT {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -50,4 +50,4 @@ impl SignalsReady for CONVERT {
     }
 }
 
-impl SignalsReadyExt for CONVERT {}
+impl SignalReadyExt for CONVERT {}

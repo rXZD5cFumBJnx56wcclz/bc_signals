@@ -2,8 +2,8 @@ use bc_signals::ready::ready_imports::*;
 
 pub fn test_bf_res_1<T>(settings_signal: &T, in_: &[Vec<f64>], signals: &[Vec<Signal>], eq: Signal)
 where
-    T: SignalsReady,
-    T: SignalsReadyExt,
+    T: SignalReady,
+    T: SignalReadyExt,
 {
     let len_sub_in = in_.len().checked_sub(1).unwrap_or_default();
     let len_sub_signals = signals.len().checked_sub(1).unwrap_or_default();
@@ -24,8 +24,8 @@ where
 
 pub fn test_f_res_1<T>(settings_signal: &T, in_: &[Vec<f64>], signals: &[Vec<Signal>], eq: Signal)
 where
-    T: SignalsReady,
-    T: SignalsReadyExt,
+    T: SignalReady,
+    T: SignalReadyExt,
 {
     assert_eq!(settings_signal.signal(in_, signals,), eq,);
 }
@@ -37,8 +37,8 @@ pub fn test_coll_res_1<T>(
     eq: Signal,
     len_elements: usize,
 ) where
-    T: SignalsReady,
-    T: SignalsReadyExt,
+    T: SignalReady,
+    T: SignalReadyExt,
 {
     assert_eq!(
         dbg!(
@@ -58,7 +58,7 @@ pub fn test_coll_res_2<T>(
     signals: &[Vec<Signal>],
     len_elements: usize,
 ) where
-    T: SignalsReadyExt,
+    T: SignalReadyExt,
 {
     let in_ = &in_
         .get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
@@ -75,8 +75,8 @@ pub fn test_coll_res_3<T>(
     signals: &[Vec<Signal>],
     eq: Vec<Signal>,
 ) where
-    T: SignalsReady,
-    T: SignalsReadyExt,
+    T: SignalReady,
+    T: SignalReadyExt,
 {
     assert_eq!(
         settings_signal

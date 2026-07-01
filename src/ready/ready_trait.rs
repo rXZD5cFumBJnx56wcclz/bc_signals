@@ -26,7 +26,7 @@ impl Default for Signal {
 fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> C
 where
     C: FromIterator<Signal>,
-    T: SignalsReady,
+    T: SignalReady,
     T: ?Sized,
 {
     let w = signal_struct.w().checked_sub(1).unwrap_or_default();
@@ -61,7 +61,7 @@ where
     }
 }
 
-pub trait SignalsReady: Any {
+pub trait SignalReady: Any {
     fn w(&self) -> usize;
     fn bf<'a>(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> BF_SIGNALS<'a>;
     fn signal_with_bf<'a>(
@@ -96,7 +96,7 @@ pub trait SignalsReady: Any {
     }
 }
 
-pub trait SignalsReadyExt: SignalsReady {
+pub trait SignalReadyExt: SignalReady {
     fn signal_coll<C>(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> C
     where
         C: FromIterator<Signal>,
