@@ -3,10 +3,10 @@ use criterion::{Criterion, criterion_group, criterion_main};
 use std::hint::black_box;
 use std::sync::LazyLock;
 
-use bc_signals::ready::pumpdump::*;
 use bc_signals::ready::ready_imports::*;
+use bc_signals::ready::th::*;
 
-static SIGNAL: LazyLock<PUMPDUMP> = LazyLock::new(|| PUMPDUMP::new(0.0001, 0.0001, 1.0, 0, 0, 0));
+static SIGNAL: LazyLock<TH> = LazyLock::new(|| TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.,));
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| SRC_NOMAP.clone());
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
     (0..SRC.len())
@@ -14,12 +14,12 @@ static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
         .collect::<Vec<Vec<Signal>>>()
 });
 
-fn pumpdump_with_bf_1(c: &mut Criterion) {
+fn th_with_bf_1(c: &mut Criterion) {
     let s = &*SIGNAL;
     let src = &SRC[SRC.len() - 1];
     let signals = &SIGNALS[SIGNALS.len() - 1];
     let bf = SIGNAL.bf(&*SRC, &*SIGNALS);
-    c.bench_function("pumpdump_with_bf", |b| {
+    c.bench_function("th_with_bf", |b| {
         b.iter(|| {
             s.signal_with_bf(
                 black_box(src),
@@ -31,28 +31,23 @@ fn pumpdump_with_bf_1(c: &mut Criterion) {
     });
 }
 
-fn pumpdump_signal_1(c: &mut Criterion) {
+fn th_signal_1(c: &mut Criterion) {
     let s = &*SIGNAL;
     let src = &*SRC;
     let signals = &*SIGNALS;
-    c.bench_function("pumpdump_signal_1", |b| {
+    c.bench_function("th_signal_1", |b| {
         b.iter(|| s.signal(black_box(&src), black_box(&signals)))
     });
 }
 
-fn pumpdump_coll_1(c: &mut Criterion) {
+fn th_coll_1(c: &mut Criterion) {
     let s = &*SIGNAL;
     let src = &*SRC;
     let signals = &*SIGNALS;
-    c.bench_function("pumpdump_coll_1", |b| {
+    c.bench_function("th_coll_1", |b| {
         b.iter(|| s.signal_coll::<Vec<_>>(black_box(&src), black_box(&signals)))
     });
 }
 
-criterion_group!(
-    benches,
-    pumpdump_with_bf_1,
-    pumpdump_signal_1,
-    pumpdump_coll_1
-);
+criterion_group!(benches, th_with_bf_1, th_signal_1, th_coll_1);
 criterion_main!(benches);

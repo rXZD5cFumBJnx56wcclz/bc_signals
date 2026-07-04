@@ -1,3 +1,4 @@
+use pretty_assertions::assert_eq as assert_eq_pr;
 use bc_signals::train::ready_imports::*;
 use bc_utils::nums::coll_nz;
 
@@ -12,7 +13,7 @@ where
         in_.get(..len_sub_in).unwrap_or_default(),
         signals.get(..len_sub_signals).unwrap_or_default(),
     );
-    assert_eq!(
+    assert_eq_pr!(
         settings_signal.signal_with_bf(
             in_.last().unwrap_or(&vec![0.0]),
             &signals.get(len_sub_signals).unwrap_or(&vec![]),
@@ -28,7 +29,7 @@ where
     T: SignalTrain,
     T: SignalTrainExt,
 {
-    assert_eq!(settings_signal.signal(in_, signals,), eq,);
+    assert_eq_pr!(settings_signal.signal(in_, signals,), eq,);
 }
 
 pub fn test_coll_res_1<T>(
@@ -41,7 +42,7 @@ pub fn test_coll_res_1<T>(
     T: SignalTrain,
     T: SignalTrainExt,
 {
-    assert_eq!(
+    assert_eq_pr!(
         dbg!(
             settings_signal.signal_coll::<Vec<_>>(
                 &in_.get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
@@ -64,7 +65,7 @@ pub fn test_coll_res_2<T>(
     let in_ = &in_
         .get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
         .unwrap_or_default();
-    assert_eq!(
+    assert_eq_pr!(
         settings_signal.signal_coll::<Vec<_>>(in_, signals,)
             [len_elements - 1 - settings_signal.w()],
         settings_signal.signal(in_, signals,),
@@ -76,7 +77,7 @@ where
     T: SignalTrain,
     T: SignalTrainExt,
 {
-    assert_eq!(
+    assert_eq_pr!(
         coll_nz::<Vec<f64>, f64, _>(&settings_signal.signals_vec(in_, signals), 0.0),
         coll_nz::<Vec<f64>, f64, _>(&eq, 0.0),
     );

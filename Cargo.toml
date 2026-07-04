@@ -12,6 +12,7 @@ bc_utils = {path = "../bc_utils"}
 
 [dev-dependencies]
 criterion = {version = "0.8", features = ["html_reports"]}
+pretty_assertions = "1"
 
 [[bench]]
 name = "change_signal"
@@ -44,9 +45,9 @@ harness = false
 path = "benches/ready/set_probability.rs"
 
  [[bench]]
-name = "pumpdump"
+name = "th"
 harness = false
-path = "benches/ready/pumpdump.rs"
+path = "benches/ready/th.rs"
 
 [[bench]]
 name = "copy"

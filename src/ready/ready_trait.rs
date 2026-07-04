@@ -1,27 +1,9 @@
 use std::any::Any;
 
+use bc_utils_lg::structs::signals::Signal;
+
 use crate::def_impl::BF_SIGNALS;
 
-#[derive(Debug, PartialEq, Clone, Copy)]
-pub struct Signal {
-    pub signal: f64,
-    pub probability: f64,
-}
-
-impl Signal {
-    pub fn new(signal: f64, probability: f64) -> Self {
-        Self {
-            signal,
-            probability,
-        }
-    }
-}
-
-impl Default for Signal {
-    fn default() -> Self {
-        Self::new(0., 1.)
-    }
-}
 
 fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> C
 where

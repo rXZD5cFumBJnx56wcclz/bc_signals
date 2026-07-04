@@ -1,4 +1,4 @@
-use bc_signals::ready::pumpdump::PUMPDUMP;
+use bc_signals::ready::th::TH;
 use bc_utils_lg::statics::prices::SRC_NOMAP;
 use criterion::{Criterion, criterion_group, criterion_main};
 use std::hint::black_box;
@@ -10,7 +10,7 @@ use bc_signals::ready::ready_imports::*;
 static SIGNAL: LazyLock<INVERT> = LazyLock::new(|| INVERT::default());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| SRC_NOMAP.clone());
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
-    PUMPDUMP::new(0.0001, 0.0001, 1.0, 0, 0, 0)
+    TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.,)
         .signals_vec(&*SRC, &vec![])
         .into_iter()
         .map(|s| vec![s])

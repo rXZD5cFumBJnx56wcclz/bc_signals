@@ -1,7 +1,7 @@
 use crate::ready::ready_imports::*;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct PUMPDUMP {
+pub struct TH {
     pub th_min: f64,
     pub th_max: f64,
     pub limit: f64,
@@ -16,7 +16,7 @@ pub struct PUMPDUMP {
     pub add_window_accuracy: usize,
 }
 
-impl PUMPDUMP {
+impl TH {
     pub fn new(
         th_min: f64,
         th_max: f64,
@@ -24,6 +24,9 @@ impl PUMPDUMP {
         index_min: usize,
         index_max: usize,
         index_normal: usize,
+        signal_hold: f64,
+        signal_short:  f64,
+        signal_long: f64,
     ) -> Self {
         Self {
             th_min,
@@ -32,9 +35,9 @@ impl PUMPDUMP {
             index_min,
             index_max,
             index_normal,
-            signal_hold: 0.0,
-            signal_short: -1.0,
-            signal_long: 1.0,
+            signal_hold: signal_hold,
+            signal_short: signal_short,
+            signal_long: signal_long,
             window: 1,
             mult_window_accuracy: 1,
             add_window_accuracy: 1,
@@ -78,13 +81,13 @@ impl PUMPDUMP {
     }
 }
 
-impl Default for PUMPDUMP {
+impl Default for TH {
     fn default() -> Self {
-        PUMPDUMP::new(0.03, 0.03, 0.15, 0, 0, 0)
+        TH::new(0.03, 0.03, 0.15, 0, 0, 0, 0., -1., 1.,)
     }
 }
 
-impl SignalReady for PUMPDUMP {
+impl SignalReady for TH {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -114,4 +117,4 @@ impl SignalReady for PUMPDUMP {
     }
 }
 
-impl SignalReadyExt for PUMPDUMP {}
+impl SignalReadyExt for TH {}
