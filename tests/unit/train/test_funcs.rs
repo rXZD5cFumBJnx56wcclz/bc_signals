@@ -1,6 +1,6 @@
-use pretty_assertions::assert_eq as assert_eq_pr;
 use bc_signals::train::ready_imports::*;
-use bc_utils::nums::coll_nz;
+use bc_utils::nums::nz_coll;
+use pretty_assertions::assert_eq as assert_eq_pr;
 
 pub fn test_bf_res_1<T>(settings_signal: &T, in_: &[Vec<f64>], signals: &[Vec<f64>], eq: f64)
 where
@@ -78,7 +78,7 @@ where
     T: SignalTrainExt,
 {
     assert_eq_pr!(
-        coll_nz::<Vec<f64>, f64, _>(&settings_signal.signals_vec(in_, signals), 0.0),
-        coll_nz::<Vec<f64>, f64, _>(&eq, 0.0),
+        nz_coll::<Vec<f64>, f64, _>(&settings_signal.signals_vec(in_, signals), 0.0),
+        nz_coll::<Vec<f64>, f64, _>(&eq, 0.0),
     );
 }

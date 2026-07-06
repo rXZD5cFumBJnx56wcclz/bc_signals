@@ -4,7 +4,6 @@ use bc_utils_lg::structs::signals::Signal;
 
 use crate::def_impl::BF_SIGNALS;
 
-
 fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> C
 where
     C: FromIterator<Signal>,

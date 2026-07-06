@@ -25,7 +25,7 @@ impl TH {
         index_max: usize,
         index_normal: usize,
         signal_hold: f64,
-        signal_short:  f64,
+        signal_short: f64,
         signal_long: f64,
     ) -> Self {
         Self {
@@ -83,7 +83,7 @@ impl TH {
 
 impl Default for TH {
     fn default() -> Self {
-        TH::new(0.03, 0.03, 0.15, 0, 0, 0, 0., -1., 1.,)
+        TH::new(0.03, 0.03, 0.15, 0, 0, 0, 0., -1., 1.)
     }
 }
 

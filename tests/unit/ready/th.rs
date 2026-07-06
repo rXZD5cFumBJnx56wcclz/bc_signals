@@ -2,12 +2,11 @@ use std::sync::LazyLock;
 
 use bc_signals::ready::ready_imports::*;
 use bc_signals::ready::th::*;
-use bc_utils_lg::statics::prices::SRC_NOMAP;
+use bc_utils_lg::statics::prices::SRC;
 
 use crate::unit::ready::test_funcs::*;
 
-static SIGNAL: LazyLock<TH> = LazyLock::new(|| TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.,));
-static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| SRC_NOMAP.clone());
+static SIGNAL: LazyLock<TH> = LazyLock::new(|| TH::new(0.0001, 0.0001, 1.0, 1, 1, 1, 0., -1., 1.));
 const RES: LazyLock<Signal> = LazyLock::new(|| Signal::new(1.0, 1.0));
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
     (0..SRC.len())

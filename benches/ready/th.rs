@@ -1,4 +1,4 @@
-use bc_utils_lg::statics::prices::SRC_NOMAP;
+use bc_utils_lg::statics::prices::SRC;
 use criterion::{Criterion, criterion_group, criterion_main};
 use std::hint::black_box;
 use std::sync::LazyLock;
@@ -6,8 +6,7 @@ use std::sync::LazyLock;
 use bc_signals::ready::ready_imports::*;
 use bc_signals::ready::th::*;
 
-static SIGNAL: LazyLock<TH> = LazyLock::new(|| TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.,));
-static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| SRC_NOMAP.clone());
+static SIGNAL: LazyLock<TH> = LazyLock::new(|| TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.));
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
     (0..SRC.len())
         .map(|_| vec![Signal::default()])
