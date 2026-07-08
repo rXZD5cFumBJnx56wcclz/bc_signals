@@ -4,7 +4,7 @@ use std::hint::black_box;
 use std::sync::LazyLock;
 
 use bc_signals::train::mm::*;
-use bc_signals::train::ready_imports::*;
+use bc_signals::train::prelude::*;
 
 static SIGNALS: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| Default::default());
 static SIGNAL: LazyLock<MM> = LazyLock::new(|| MM::new(0, 0, 2, 3, 0.0001, 0.01, 0.0, 1.0, 2.0));

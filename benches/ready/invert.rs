@@ -5,7 +5,7 @@ use std::hint::black_box;
 use std::sync::LazyLock;
 
 use bc_signals::ready::invert::*;
-use bc_signals::ready::ready_imports::*;
+use bc_signals::ready::prelude::*;
 
 static SIGNAL: LazyLock<INVERT> = LazyLock::new(|| INVERT::default());
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {

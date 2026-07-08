@@ -3,7 +3,7 @@ use std::hint::black_box;
 use std::sync::LazyLock;
 
 use bc_signals::ready::change_signal::*;
-use bc_signals::ready::ready_imports::*;
+use bc_signals::ready::prelude::*;
 
 static SIGNAL: LazyLock<CHANGE_SIGNAL> = LazyLock::new(|| CHANGE_SIGNAL::default());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| Default::default());

@@ -2,7 +2,7 @@ use criterion::{Criterion, criterion_group, criterion_main};
 use std::hint::black_box;
 use std::sync::LazyLock;
 
-use bc_signals::ready::ready_imports::*;
+use bc_signals::ready::prelude::*;
 use bc_signals::ready::set_probability::*;
 
 static SIGNAL: LazyLock<SET_PROBABILITY> = LazyLock::new(|| SET_PROBABILITY::default());

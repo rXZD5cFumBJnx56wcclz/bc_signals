@@ -3,15 +3,12 @@ use std::hint::black_box;
 use std::sync::LazyLock;
 
 use bc_signals::ready::filter::*;
-use bc_signals::ready::ready_imports::*;
+use bc_signals::ready::prelude::*;
 
 static SIGNAL: LazyLock<FILTER> = LazyLock::new(|| FILTER::new());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![]);
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
-    vec![
-        vec![Signal::new(-1.0, 1.0), Signal::new(1.0, 1.0)],
-        vec![Signal::new(1.0, 1.0); 2],
-    ]
+    vec![vec![Signal::new(-1.0, 1.0), Signal::new(1.0, 1.0)], vec![Signal::new(1.0, 1.0); 2]]
 });
 
 fn filter_with_bf_1(c: &mut Criterion) {

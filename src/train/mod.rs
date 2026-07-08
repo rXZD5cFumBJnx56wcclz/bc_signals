@@ -1,3 +1,4 @@
+pub mod main_trait;
 pub mod mm;
-pub mod ready_imports;
-pub mod train_trait;
+pub mod prelude;
+pub mod test_funcs;

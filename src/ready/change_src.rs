@@ -2,7 +2,7 @@
 
 use std::cmp::Ordering;
 
-use crate::ready::ready_imports::*;
+use crate::ready::prelude::*;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct CHANGE_SRC {
@@ -15,7 +15,11 @@ pub struct CHANGE_SRC {
 }
 
 impl CHANGE_SRC {
-    pub fn new(signal_short: f64, signal_long: f64, signal_hold: f64) -> Self {
+    pub fn new(
+        signal_short: f64,
+        signal_long: f64,
+        signal_hold: f64,
+    ) -> Self {
         Self {
             signal_short,
             signal_long,
@@ -25,22 +29,40 @@ impl CHANGE_SRC {
             add_window_accuracy: 2,
         }
     }
-    pub fn set_window(&mut self, window: usize) {
+    pub fn set_window(
+        &mut self,
+        window: usize,
+    ) {
         self.window = window;
     }
-    pub fn set_mult_window_accuracy(&mut self, mult_window_accuracy: usize) {
+    pub fn set_mult_window_accuracy(
+        &mut self,
+        mult_window_accuracy: usize,
+    ) {
         self.mult_window_accuracy = mult_window_accuracy;
     }
-    pub fn set_add_window_accuracy(&mut self, add_window_accuracy: usize) {
+    pub fn set_add_window_accuracy(
+        &mut self,
+        add_window_accuracy: usize,
+    ) {
         self.add_window_accuracy = add_window_accuracy;
     }
-    pub fn set_signal_short(&mut self, signal_short: f64) {
+    pub fn set_signal_short(
+        &mut self,
+        signal_short: f64,
+    ) {
         self.signal_short = signal_short;
     }
-    pub fn set_signal_long(&mut self, signal_long: f64) {
+    pub fn set_signal_long(
+        &mut self,
+        signal_long: f64,
+    ) {
         self.signal_long = signal_long;
     }
-    pub fn set_signal_hold(&mut self, signal_hold: f64) {
+    pub fn set_signal_hold(
+        &mut self,
+        signal_hold: f64,
+    ) {
         self.signal_hold = signal_hold;
     }
 }
@@ -55,7 +77,11 @@ impl SignalReady for CHANGE_SRC {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
-    fn bf<'a>(&self, src: &[Vec<f64>], _: &[Vec<Signal>]) -> BF_SIGNALS<'a> {
+    fn bf<'a>(
+        &self,
+        src: &[Vec<f64>],
+        _: &[Vec<Signal>],
+    ) -> BF_SIGNALS<'a> {
         <BF_SIGNALS as BfSignalsExt>::new([("src_l", vec![vec![src[src.len() - 1][0]]])])
     }
     fn signal_with_bf<'a>(
@@ -77,3 +103,53 @@ impl SignalReady for CHANGE_SRC {
 }
 
 impl SignalReadyExt for CHANGE_SRC {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use crate::ready::test_funcs::test_funcs::*;
+
+    static SIGNAL: LazyLock<CHANGE_SRC> = LazyLock::new(|| CHANGE_SRC::default());
+    static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![vec![1.0], vec![2.0], vec![3.0]]);
+    const RES: LazyLock<Signal> = LazyLock::new(|| Signal::new(1.0, 1.0));
+    static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
+        let mut a = vec![vec![Signal::new(1.0, 1.0)]; 2];
+        a.reserve(1);
+        a.push(vec![Signal::new(-1.0, 1.0)]);
+        a
+    });
+
+    #[test]
+    fn change_with_bf_res_1() {
+        test_bf_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
+    }
+
+    #[test]
+    fn change_src_res_1() {
+        test_f_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
+    }
+
+    #[test]
+    fn change_src_coll_res_1() {
+        test_coll_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES, 3);
+    }
+
+    #[test]
+    fn change_src_coll_res_2() {
+        test_coll_res_2(&*SIGNAL, &SRC, &SIGNALS, 3);
+    }
+
+    #[test]
+    fn change_src_coll_res_3() {
+        test_coll_res_3(
+            &*SIGNAL,
+            &SRC,
+            &SIGNALS,
+            vec![
+                Signal { signal: 1.0, probability: 1.0 },
+                Signal { signal: 1.0, probability: 1.0 },
+            ],
+        );
+    }
+}

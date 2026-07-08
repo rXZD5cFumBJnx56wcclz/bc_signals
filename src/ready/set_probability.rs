@@ -1,6 +1,6 @@
 #![allow(non_camel_case_types)]
 
-use crate::ready::ready_imports::*;
+use crate::ready::prelude::*;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct SET_PROBABILITY {
@@ -17,13 +17,22 @@ impl SET_PROBABILITY {
             add_window_accuracy: 0,
         }
     }
-    pub fn set_window(&mut self, window: usize) {
+    pub fn set_window(
+        &mut self,
+        window: usize,
+    ) {
         self.window = window;
     }
-    pub fn set_mult_window_accuracy(&mut self, mult_window_accuracy: usize) {
+    pub fn set_mult_window_accuracy(
+        &mut self,
+        mult_window_accuracy: usize,
+    ) {
         self.mult_window_accuracy = mult_window_accuracy;
     }
-    pub fn set_add_window_accuracy(&mut self, add_window_accuracy: usize) {
+    pub fn set_add_window_accuracy(
+        &mut self,
+        add_window_accuracy: usize,
+    ) {
         self.add_window_accuracy = add_window_accuracy;
     }
 }
@@ -38,7 +47,11 @@ impl SignalReady for SET_PROBABILITY {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
-    fn bf<'a>(&self, _: &[Vec<f64>], _: &[Vec<Signal>]) -> BF_SIGNALS<'a> {
+    fn bf<'a>(
+        &self,
+        _: &[Vec<f64>],
+        _: &[Vec<Signal>],
+    ) -> BF_SIGNALS<'a> {
         Default::default()
     }
     fn signal_with_bf<'a>(
@@ -55,3 +68,49 @@ impl SignalReady for SET_PROBABILITY {
 }
 
 impl SignalReadyExt for SET_PROBABILITY {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use crate::ready::test_funcs::test_funcs::*;
+
+    static SIGNAL: LazyLock<SET_PROBABILITY> = LazyLock::new(|| SET_PROBABILITY::default());
+    static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![vec![0.7333333333333333,]; 2]);
+    const RES: LazyLock<Signal> = LazyLock::new(|| Signal::new(1.0, 0.7333333333333333));
+    static SIGNALS: LazyLock<Vec<Vec<Signal>>> =
+        LazyLock::new(|| vec![vec![Signal::new(1.0, 1.0)]; 2]);
+
+    #[test]
+    fn set_probability_with_bf_res_1() {
+        test_bf_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
+    }
+
+    #[test]
+    fn set_probability_signal_res_1() {
+        test_f_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
+    }
+
+    #[test]
+    fn set_probability_coll_res_1() {
+        test_coll_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES, 2);
+    }
+
+    #[test]
+    fn set_probability_coll_res_2() {
+        test_coll_res_2(&*SIGNAL, &SRC, &SIGNALS, 2);
+    }
+
+    #[test]
+    fn set_probability_coll_res_3() {
+        test_coll_res_3(
+            &*SIGNAL,
+            &SRC,
+            &SIGNALS,
+            vec![
+                Signal { signal: 1.0, probability: 0.7333333333333333 },
+                Signal { signal: 1.0, probability: 0.7333333333333333 },
+            ],
+        );
+    }
+}

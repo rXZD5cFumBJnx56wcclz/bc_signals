@@ -2,9 +2,11 @@ use std::any::Any;
 
 use crate::def_impl::BF_SIGNALS;
 
-type SignalTrainType = Vec<f64>;
-
-fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>], signals: &[Vec<f64>]) -> C
+fn signal_coll<C, T>(
+    signal_struct: &T,
+    src: &[Vec<f64>],
+    signals: &[Vec<f64>],
+) -> C
 where
     C: FromIterator<f64>,
     T: SignalTrain,
@@ -40,7 +42,11 @@ where
 
 pub trait SignalTrain: Any {
     fn w(&self) -> usize;
-    fn bf<'a>(&self, src: &[Vec<f64>], signals: &[Vec<f64>]) -> BF_SIGNALS<'a>;
+    fn bf<'a>(
+        &self,
+        src: &[Vec<f64>],
+        signals: &[Vec<f64>],
+    ) -> BF_SIGNALS<'a>;
     fn signal_with_bf<'a>(
         &self,
         src: &[f64],
@@ -48,7 +54,11 @@ pub trait SignalTrain: Any {
         bf: &BF_SIGNALS<'a>,
         index_: usize,
     ) -> f64;
-    fn signal(&self, src: &[Vec<f64>], signals: &[Vec<f64>]) -> f64 {
+    fn signal(
+        &self,
+        src: &[Vec<f64>],
+        signals: &[Vec<f64>],
+    ) -> f64 {
         let bf = self.bf(
             &src[src.len().checked_sub(self.w()).unwrap_or_default()
                 ..src.len().checked_sub(1).unwrap_or_default()],
@@ -62,19 +72,29 @@ pub trait SignalTrain: Any {
             0,
         )
     }
-    fn signals_vec(&self, src: &[Vec<f64>], signals: &[Vec<f64>]) -> Vec<f64> {
+    fn signals_vec(
+        &self,
+        src: &[Vec<f64>],
+        signals: &[Vec<f64>],
+    ) -> Vec<f64> {
         signal_coll(self, src, signals)
     }
 }
 
 pub trait SignalTrainExt: SignalTrain {
-    fn signal_coll<C>(&self, src: &[Vec<f64>], signals: &[Vec<f64>]) -> C
+    fn signal_coll<C>(
+        &self,
+        src: &[Vec<f64>],
+        signals: &[Vec<f64>],
+    ) -> C
     where
         C: FromIterator<f64>,
     {
         signal_coll(self, src, signals)
     }
 }
+
+type SignalTrainType = Vec<f64>;
 
 pub trait SignalTrainTo {
     fn to_i32(self) -> Vec<i32>;

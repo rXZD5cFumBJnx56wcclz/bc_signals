@@ -2,16 +2,13 @@ use criterion::{Criterion, criterion_group, criterion_main};
 use std::hint::black_box;
 use std::sync::LazyLock;
 
-use bc_signals::ready::ready_imports::*;
+use bc_signals::ready::prelude::*;
 use bc_signals::ready::repeat::*;
 
 static SIGNAL: LazyLock<REPEAT> = LazyLock::new(|| REPEAT::default());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![]);
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
-    vec![
-        vec![Signal::new(-1.0, 1.0), Signal::new(1.0, 1.0)],
-        vec![Signal::new(1.0, 1.0); 2],
-    ]
+    vec![vec![Signal::new(-1.0, 1.0), Signal::new(1.0, 1.0)], vec![Signal::new(1.0, 1.0); 2]]
 });
 
 fn repeat_with_bf_1(c: &mut Criterion) {

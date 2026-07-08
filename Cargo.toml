@@ -7,9 +7,6 @@ edition = "2024"
 bc_utils_lg ={ path = "../bc_utils_lg" }
 bc_utils = {path = "../bc_utils"}
 
-# ndarray = "0.15"
-# burn = {version = "0.18", features = ["wgpu"]}
-
 [dev-dependencies]
 criterion = {version = "0.8", features = ["html_reports"]}
 pretty_assertions = "1"

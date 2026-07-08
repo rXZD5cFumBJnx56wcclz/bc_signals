@@ -4,7 +4,11 @@ use bc_utils_lg::structs::signals::Signal;
 
 use crate::def_impl::BF_SIGNALS;
 
-fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> C
+fn signal_coll<C, T>(
+    signal_struct: &T,
+    src: &[Vec<f64>],
+    signals: &[Vec<Signal>],
+) -> C
 where
     C: FromIterator<Signal>,
     T: SignalReady,
@@ -44,7 +48,11 @@ where
 
 pub trait SignalReady: Any {
     fn w(&self) -> usize;
-    fn bf<'a>(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> BF_SIGNALS<'a>;
+    fn bf<'a>(
+        &self,
+        src: &[Vec<f64>],
+        signals: &[Vec<Signal>],
+    ) -> BF_SIGNALS<'a>;
     fn signal_with_bf<'a>(
         &self,
         src: &[f64],
@@ -52,7 +60,11 @@ pub trait SignalReady: Any {
         bf: &BF_SIGNALS<'a>,
         index_: usize,
     ) -> Signal;
-    fn signal(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> Signal {
+    fn signal(
+        &self,
+        src: &[Vec<f64>],
+        signals: &[Vec<Signal>],
+    ) -> Signal {
         let len_sub_one_signals = signals.len().checked_sub(1).unwrap_or_default();
         let bf;
         if self.w() != 0 {
@@ -72,13 +84,21 @@ pub trait SignalReady: Any {
             0,
         )
     }
-    fn signals_vec(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> Vec<Signal> {
+    fn signals_vec(
+        &self,
+        src: &[Vec<f64>],
+        signals: &[Vec<Signal>],
+    ) -> Vec<Signal> {
         signal_coll(self, src, signals)
     }
 }
 
 pub trait SignalReadyExt: SignalReady {
-    fn signal_coll<C>(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> C
+    fn signal_coll<C>(
+        &self,
+        src: &[Vec<f64>],
+        signals: &[Vec<Signal>],
+    ) -> C
     where
         C: FromIterator<Signal>,
     {

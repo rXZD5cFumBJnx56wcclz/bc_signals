@@ -3,7 +3,7 @@ use criterion::{Criterion, criterion_group, criterion_main};
 use std::hint::black_box;
 use std::sync::LazyLock;
 
-use bc_signals::ready::ready_imports::*;
+use bc_signals::ready::prelude::*;
 use bc_signals::ready::th::*;
 
 static SIGNAL: LazyLock<TH> = LazyLock::new(|| TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.));
