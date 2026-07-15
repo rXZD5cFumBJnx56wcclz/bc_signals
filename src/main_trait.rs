@@ -2,7 +2,7 @@ use std::any::Any;
 
 use bc_utils_lg::structs::signals::Signal;
 
-use crate::def_impl::BF_SIGNALS;
+use crate::bf_signals::BF_SIGNALS;
 
 fn signal_coll<C, T>(
     signal_struct: &T,

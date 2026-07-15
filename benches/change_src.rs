@@ -1,27 +1,25 @@
-use bc_signals::ready::th::TH;
-use bc_utils_lg::statics::prices::SRC;
 use criterion::{Criterion, criterion_group, criterion_main};
 use std::hint::black_box;
 use std::sync::LazyLock;
 
-use bc_signals::ready::invert::*;
-use bc_signals::ready::prelude::*;
+use bc_signals::change_src::*;
+use bc_signals::prelude::*;
 
-static SIGNAL: LazyLock<INVERT> = LazyLock::new(|| INVERT::default());
+static SIGNAL: LazyLock<CHANGE_SRC> = LazyLock::new(|| CHANGE_SRC::default());
+static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![vec![1.0], vec![2.0], vec![3.0]]);
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
-    TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.)
-        .signals_vec(&*SRC, &vec![])
-        .into_iter()
-        .map(|s| vec![s])
-        .collect::<Vec<Vec<Signal>>>()
+    let mut a = vec![vec![Signal::new(1.0, 1.0)]; 2];
+    a.reserve(1);
+    a.push(vec![Signal::new(-1.0, 1.0)]);
+    a
 });
 
-fn invert_with_bf_1(c: &mut Criterion) {
+fn change_src_with_bf_1(c: &mut Criterion) {
     let s = &*SIGNAL;
-    let src = &SRC[SRC.len() - 1];
+    let src = SRC[0].as_slice();
     let signals = &SIGNALS[SIGNALS.len() - 1];
     let bf = SIGNAL.bf(&*SRC, &*SIGNALS);
-    c.bench_function("invert_with_bf", |b| {
+    c.bench_function("change_src_with_bf", |b| {
         b.iter(|| {
             s.signal_with_bf(
                 black_box(src),
@@ -33,23 +31,28 @@ fn invert_with_bf_1(c: &mut Criterion) {
     });
 }
 
-fn invert_signal_1(c: &mut Criterion) {
+fn change_src_signal_1(c: &mut Criterion) {
     let s = &*SIGNAL;
     let src = &*SRC;
     let signals = &*SIGNALS;
-    c.bench_function("invert_signal_1", |b| {
+    c.bench_function("change_src_signal_1", |b| {
         b.iter(|| s.signal(black_box(&src), black_box(&signals)))
     });
 }
 
-fn invert_coll_1(c: &mut Criterion) {
+fn change_src_coll_1(c: &mut Criterion) {
     let s = &*SIGNAL;
     let src = &*SRC;
     let signals = &*SIGNALS;
-    c.bench_function("invert_coll_1", |b| {
+    c.bench_function("change_src_coll_1", |b| {
         b.iter(|| s.signal_coll::<Vec<_>>(black_box(&src), black_box(&signals)))
     });
 }
 
-criterion_group!(benches, invert_with_bf_1, invert_signal_1, invert_coll_1);
+criterion_group!(
+    benches,
+    change_src_with_bf_1,
+    change_src_signal_1,
+    change_src_coll_1
+);
 criterion_main!(benches);

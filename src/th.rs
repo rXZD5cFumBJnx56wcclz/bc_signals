@@ -1,4 +1,4 @@
-use crate::ready::prelude::*;
+use crate::prelude::*;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct TH {
@@ -164,7 +164,7 @@ mod tests {
     use super::*;
     use bc_utils_lg::statics::prices::SRC;
 
-    use crate::ready::test_funcs::test_funcs::*;
+    use crate::test_funcs::test_funcs::*;
 
     static SIGNAL: LazyLock<TH> =
         LazyLock::new(|| TH::new(0.0001, 0.0001, 1.0, 1, 1, 1, 0., -1., 1.));

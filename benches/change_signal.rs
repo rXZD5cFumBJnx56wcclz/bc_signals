@@ -2,8 +2,8 @@ use criterion::{Criterion, criterion_group, criterion_main};
 use std::hint::black_box;
 use std::sync::LazyLock;
 
-use bc_signals::ready::change_signal::*;
-use bc_signals::ready::prelude::*;
+use bc_signals::change_signal::*;
+use bc_signals::prelude::*;
 
 static SIGNAL: LazyLock<CHANGE_SIGNAL> = LazyLock::new(|| CHANGE_SIGNAL::default());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| Default::default());

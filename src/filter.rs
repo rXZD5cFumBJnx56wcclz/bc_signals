@@ -1,15 +1,13 @@
-#![allow(non_camel_case_types)]
-
-use crate::ready::prelude::*;
+use crate::prelude::*;
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct SET_PROBABILITY {
+pub struct FILTER {
     pub window: usize,
     pub mult_window_accuracy: usize,
     pub add_window_accuracy: usize,
 }
 
-impl SET_PROBABILITY {
+impl FILTER {
     pub fn new() -> Self {
         Self {
             window: 0,
@@ -37,13 +35,13 @@ impl SET_PROBABILITY {
     }
 }
 
-impl Default for SET_PROBABILITY {
+impl Default for FILTER {
     fn default() -> Self {
-        Self::new()
+        FILTER::new()
     }
 }
 
-impl SignalReady for SET_PROBABILITY {
+impl SignalReady for FILTER {
     fn w(&self) -> usize {
         self.window * self.mult_window_accuracy + self.add_window_accuracy
     }
@@ -56,60 +54,62 @@ impl SignalReady for SET_PROBABILITY {
     }
     fn signal_with_bf<'a>(
         &self,
-        src: &[f64],
+        _: &[f64],
         signals: &[Signal],
         _: &BF_SIGNALS<'a>,
         _: usize,
     ) -> Signal {
-        let mut signal = signals[0];
-        signal.probability = src[0];
-        signal
+        if signals.iter().all(|s| s == &signals[0]) {
+            return signals[0];
+        }
+        Default::default()
     }
 }
 
-impl SignalReadyExt for SET_PROBABILITY {}
+impl SignalReadyExt for FILTER {}
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    use crate::ready::test_funcs::test_funcs::*;
+    use crate::test_funcs::test_funcs::*;
 
-    static SIGNAL: LazyLock<SET_PROBABILITY> = LazyLock::new(|| SET_PROBABILITY::default());
-    static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![vec![0.7333333333333333,]; 2]);
-    const RES: LazyLock<Signal> = LazyLock::new(|| Signal::new(1.0, 0.7333333333333333));
-    static SIGNALS: LazyLock<Vec<Vec<Signal>>> =
-        LazyLock::new(|| vec![vec![Signal::new(1.0, 1.0)]; 2]);
+    static SIGNAL: LazyLock<FILTER> = LazyLock::new(|| FILTER::new());
+    static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![]);
+    const RES: LazyLock<Signal> = LazyLock::new(|| Signal::new(1.0, 1.0));
+    static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
+        vec![vec![Signal::new(-1.0, 1.0), Signal::new(1.0, 1.0)], vec![Signal::new(1.0, 1.0); 2]]
+    });
 
     #[test]
-    fn set_probability_with_bf_res_1() {
+    fn filter_with_bf_res_1() {
         test_bf_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
     }
 
     #[test]
-    fn set_probability_signal_res_1() {
+    fn filter_signal_res_1() {
         test_f_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
     }
 
     #[test]
-    fn set_probability_coll_res_1() {
+    fn filter_coll_res_1() {
         test_coll_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES, 2);
     }
 
     #[test]
-    fn set_probability_coll_res_2() {
+    fn filter_coll_res_2() {
         test_coll_res_2(&*SIGNAL, &SRC, &SIGNALS, 2);
     }
 
     #[test]
-    fn set_probability_coll_res_3() {
+    fn filter_coll_res_3() {
         test_coll_res_3(
             &*SIGNAL,
             &SRC,
             &SIGNALS,
             vec![
-                Signal { signal: 1.0, probability: 0.7333333333333333 },
-                Signal { signal: 1.0, probability: 0.7333333333333333 },
+                Signal { signal: 0.0, probability: 1.0 },
+                Signal { signal: 1.0, probability: 1.0 },
             ],
         );
     }

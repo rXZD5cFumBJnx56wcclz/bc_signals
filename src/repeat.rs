@@ -1,4 +1,4 @@
-use crate::ready::prelude::*;
+use crate::prelude::*;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct REPEAT {
@@ -88,7 +88,7 @@ impl SignalReadyExt for REPEAT {}
 mod tests {
     use super::*;
 
-    use crate::ready::test_funcs::test_funcs::*;
+    use crate::test_funcs::test_funcs::*;
 
     static SIGNAL: LazyLock<REPEAT> = LazyLock::new(|| REPEAT::default());
     static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![]);

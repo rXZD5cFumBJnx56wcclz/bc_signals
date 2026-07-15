@@ -1,6 +1,6 @@
 #![allow(non_camel_case_types)]
 
-use crate::ready::prelude::*;
+use crate::prelude::*;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct CHANGE_SIGNAL {
@@ -82,7 +82,7 @@ mod tests {
 
     use super::*;
 
-    use crate::ready::test_funcs::test_funcs::*;
+    use crate::test_funcs::test_funcs::*;
 
     static SIGNAL: LazyLock<CHANGE_SIGNAL> = LazyLock::new(|| CHANGE_SIGNAL::new());
     static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![]);

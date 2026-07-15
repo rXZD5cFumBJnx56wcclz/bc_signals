@@ -2,7 +2,7 @@
 
 use std::cmp::Ordering;
 
-use crate::ready::prelude::*;
+use crate::prelude::*;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct CHANGE_SRC {
@@ -108,7 +108,7 @@ impl SignalReadyExt for CHANGE_SRC {}
 mod tests {
     use super::*;
 
-    use crate::ready::test_funcs::test_funcs::*;
+    use crate::test_funcs::test_funcs::*;
 
     static SIGNAL: LazyLock<CHANGE_SRC> = LazyLock::new(|| CHANGE_SRC::default());
     static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![vec![1.0], vec![2.0], vec![3.0]]);

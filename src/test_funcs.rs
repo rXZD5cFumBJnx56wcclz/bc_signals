@@ -1,17 +1,17 @@
 #[cfg(test)]
 pub mod test_funcs {
-    use crate::train::prelude::*;
-    use bc_utils::nums::nz_coll;
     use pretty_assertions::assert_eq as assert_eq_pr;
+
+    use crate::prelude::*;
 
     pub fn test_bf_res_1<T>(
         settings_signal: &T,
         in_: &[Vec<f64>],
-        signals: &[Vec<f64>],
-        eq: f64,
+        signals: &[Vec<Signal>],
+        eq: Signal,
     ) where
-        T: SignalTrain,
-        T: SignalTrainExt,
+        T: SignalReady,
+        T: SignalReadyExt,
     {
         let len_sub_in = in_.len().checked_sub(1).unwrap_or_default();
         let len_sub_signals = signals.len().checked_sub(1).unwrap_or_default();
@@ -33,11 +33,11 @@ pub mod test_funcs {
     pub fn test_f_res_1<T>(
         settings_signal: &T,
         in_: &[Vec<f64>],
-        signals: &[Vec<f64>],
-        eq: f64,
+        signals: &[Vec<Signal>],
+        eq: Signal,
     ) where
-        T: SignalTrain,
-        T: SignalTrainExt,
+        T: SignalReady,
+        T: SignalReadyExt,
     {
         assert_eq_pr!(settings_signal.signal(in_, signals,), eq,);
     }
@@ -45,12 +45,12 @@ pub mod test_funcs {
     pub fn test_coll_res_1<T>(
         settings_signal: &T,
         in_: &[Vec<f64>],
-        signals: &[Vec<f64>],
-        eq: f64,
+        signals: &[Vec<Signal>],
+        eq: Signal,
         len_elements: usize,
     ) where
-        T: SignalTrain,
-        T: SignalTrainExt,
+        T: SignalReady,
+        T: SignalReadyExt,
     {
         assert_eq_pr!(
             dbg!(
@@ -59,7 +59,7 @@ pub mod test_funcs {
                         .unwrap_or_default(),
                     signals,
                 )
-            )[len_elements - 1 - settings_signal.w()],
+            )[len_elements - 1],
             eq,
         );
     }
@@ -67,17 +67,16 @@ pub mod test_funcs {
     pub fn test_coll_res_2<T>(
         settings_signal: &T,
         in_: &[Vec<f64>],
-        signals: &[Vec<f64>],
+        signals: &[Vec<Signal>],
         len_elements: usize,
     ) where
-        T: SignalTrainExt,
+        T: SignalReadyExt,
     {
         let in_ = &in_
             .get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
             .unwrap_or_default();
         assert_eq_pr!(
-            settings_signal.signal_coll::<Vec<_>>(in_, signals,)
-                [len_elements - 1 - settings_signal.w()],
+            settings_signal.signal_coll::<Vec<_>>(in_, signals,)[len_elements - 1],
             settings_signal.signal(in_, signals,),
         );
     }
@@ -85,15 +84,19 @@ pub mod test_funcs {
     pub fn test_coll_res_3<T>(
         settings_signal: &T,
         in_: &[Vec<f64>],
-        signals: &[Vec<f64>],
-        eq: Vec<f64>,
+        signals: &[Vec<Signal>],
+        eq: Vec<Signal>,
     ) where
-        T: SignalTrain,
-        T: SignalTrainExt,
+        T: SignalReady,
+        T: SignalReadyExt,
     {
         assert_eq_pr!(
-            nz_coll::<Vec<f64>, f64, _>(&settings_signal.signals_vec(in_, signals), 0.0),
-            nz_coll::<Vec<f64>, f64, _>(&eq, 0.0),
+            settings_signal
+                .signal_coll::<Vec<_>>(&in_, signals,)
+                .into_iter()
+                .filter(|v| !v.signal.is_nan())
+                .collect::<Vec<Signal>>(),
+            eq,
         );
     }
 }

@@ -1,6 +1,6 @@
 #![allow(non_camel_case_types)]
 
-use crate::ready::prelude::*;
+use crate::prelude::*;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct COPY {
@@ -71,7 +71,7 @@ impl SignalReadyExt for COPY {}
 mod tests {
     use super::*;
 
-    use crate::ready::test_funcs::test_funcs::*;
+    use crate::test_funcs::test_funcs::*;
 
     static SIGNAL: LazyLock<COPY> = LazyLock::new(|| COPY::default());
     static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![vec![0.7333333333333333,]; 2]);

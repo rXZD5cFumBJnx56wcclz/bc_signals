@@ -14,49 +14,44 @@ pretty_assertions = "1"
 [[bench]]
 name = "change_signal"
 harness = false
-path = "benches/ready/change_signal.rs"
+path = "benches/change_signal.rs"
 
 [[bench]]
 name = "change_src"
 harness = false
-path = "benches/ready/change_src.rs"
+path = "benches/change_src.rs"
 
 [[bench]]
 name = "convert"
 harness = false
-path = "benches/ready/convert.rs"
+path = "benches/convert.rs"
 
  [[bench]]
 name = "filter"
 harness = false
-path = "benches/ready/filter.rs"
+path = "benches/filter.rs"
 
  [[bench]]
 name = "invert"
 harness = false
-path = "benches/ready/invert.rs"
+path = "benches/invert.rs"
 
  [[bench]]
 name = "set_probability"
 harness = false
-path = "benches/ready/set_probability.rs"
+path = "benches/set_probability.rs"
 
  [[bench]]
 name = "th"
 harness = false
-path = "benches/ready/th.rs"
+path = "benches/th.rs"
 
 [[bench]]
 name = "copy"
 harness = false
-path = "benches/ready/copy.rs"
+path = "benches/copy.rs"
 
 [[bench]]
 name = "repeat"
 harness = false
-path = "benches/ready/repeat.rs"
-
-[[bench]]
-name = "mm"
-harness = false
-path = "benches/train/mm.rs"
+path = "benches/repeat.rs"
