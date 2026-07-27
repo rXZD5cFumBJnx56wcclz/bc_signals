@@ -15,7 +15,7 @@ pub mod test_funcs {
     {
         let len_sub_in = in_.len().checked_sub(1).unwrap_or_default();
         let len_sub_signals = signals.len().checked_sub(1).unwrap_or_default();
-        let bf = settings_signal.bf(
+        settings_signal.init_bf(
             in_.get(..len_sub_in).unwrap_or_default(),
             signals.get(..len_sub_signals).unwrap_or_default(),
         );
@@ -23,8 +23,6 @@ pub mod test_funcs {
             settings_signal.signal_with_bf(
                 in_.last().unwrap_or(&vec![0.0]),
                 &signals.get(len_sub_signals).unwrap_or(&vec![]),
-                &bf,
-                0
             ),
             eq,
         );

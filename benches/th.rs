@@ -1,12 +1,9 @@
-use bc_utils_lg::statics::prices::SRC;
-use criterion::{Criterion, criterion_group, criterion_main};
-use std::hint::black_box;
-use std::sync::LazyLock;
-
-use bc_signals::prelude::*;
+mod prelude;
 use bc_signals::th::*;
+use prelude::*;
 
-static SIGNAL: LazyLock<TH> = LazyLock::new(|| TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.));
+static SIGNAL: LazyLock<fn() -> TH> =
+    LazyLock::new(|| || TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.));
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
     (0..SRC.len())
         .map(|_| vec![Signal::default()])
@@ -14,24 +11,17 @@ static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
 });
 
 fn th_with_bf_1(c: &mut Criterion) {
-    let s = &*SIGNAL;
+    let s = SIGNAL();
     let src = &SRC[SRC.len() - 1];
     let signals = &SIGNALS[SIGNALS.len() - 1];
-    let bf = SIGNAL.bf(&*SRC, &*SIGNALS);
+    s.init_bf(&*SRC, &*SIGNALS);
     c.bench_function("th_with_bf", |b| {
-        b.iter(|| {
-            s.signal_with_bf(
-                black_box(src),
-                black_box(signals),
-                black_box(&bf),
-                black_box(0),
-            )
-        })
+        b.iter(|| s.signal_with_bf(black_box(src), black_box(signals)))
     });
 }
 
 fn th_signal_1(c: &mut Criterion) {
-    let s = &*SIGNAL;
+    let s = SIGNAL();
     let src = &*SRC;
     let signals = &*SIGNALS;
     c.bench_function("th_signal_1", |b| {
@@ -40,7 +30,7 @@ fn th_signal_1(c: &mut Criterion) {
 }
 
 fn th_coll_1(c: &mut Criterion) {
-    let s = &*SIGNAL;
+    let s = SIGNAL();
     let src = &*SRC;
     let signals = &*SIGNALS;
     c.bench_function("th_coll_1", |b| {

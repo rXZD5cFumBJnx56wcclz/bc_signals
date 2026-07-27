@@ -1,35 +1,28 @@
-use criterion::{Criterion, criterion_group, criterion_main};
-use std::hint::black_box;
-use std::sync::LazyLock;
-
-use bc_signals::prelude::*;
+mod prelude;
 use bc_signals::repeat::*;
+use prelude::*;
 
-static SIGNAL: LazyLock<REPEAT> = LazyLock::new(|| REPEAT::default());
+static SIGNAL: LazyLock<fn() -> REPEAT> = LazyLock::new(|| || REPEAT::default());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![]);
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
-    vec![vec![Signal::new(-1.0, 1.0), Signal::new(1.0, 1.0)], vec![Signal::new(1.0, 1.0); 2]]
+    vec![
+        vec![Signal::new(-1.0, 1.0), Signal::new(1.0, 1.0)],
+        vec![Signal::new(1.0, 1.0); 2],
+    ]
 });
 
 fn repeat_with_bf_1(c: &mut Criterion) {
-    let s = &*SIGNAL;
+    let s = SIGNAL();
     let src = &vec![];
     let signals = &SIGNALS[SIGNALS.len() - 1];
-    let bf = SIGNAL.bf(&*SRC, &*SIGNALS);
+    s.init_bf(&*SRC, &*SIGNALS);
     c.bench_function("repeat_with_bf", |b| {
-        b.iter(|| {
-            s.signal_with_bf(
-                black_box(src),
-                black_box(signals),
-                black_box(&bf),
-                black_box(0),
-            )
-        })
+        b.iter(|| s.signal_with_bf(black_box(src), black_box(signals)))
     });
 }
 
 fn repeat_signal_1(c: &mut Criterion) {
-    let s = &*SIGNAL;
+    let s = SIGNAL();
     let src = &*SRC;
     let signals = &*SIGNALS;
     c.bench_function("repeat_signal_1", |b| {
@@ -38,7 +31,7 @@ fn repeat_signal_1(c: &mut Criterion) {
 }
 
 fn repeat_coll_1(c: &mut Criterion) {
-    let s = &*SIGNAL;
+    let s = SIGNAL();
     let src = &*SRC;
     let signals = &*SIGNALS;
     c.bench_function("repeat_coll_1", |b| {

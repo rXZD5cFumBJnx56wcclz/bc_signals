@@ -1,11 +1,8 @@
-use criterion::{Criterion, criterion_group, criterion_main};
-use std::hint::black_box;
-use std::sync::LazyLock;
-
+mod prelude;
 use bc_signals::change_src::*;
-use bc_signals::prelude::*;
+use prelude::*;
 
-static SIGNAL: LazyLock<CHANGE_SRC> = LazyLock::new(|| CHANGE_SRC::default());
+static SIGNAL: LazyLock<fn() -> CHANGE_SRC> = LazyLock::new(|| || CHANGE_SRC::default());
 static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![vec![1.0], vec![2.0], vec![3.0]]);
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
     let mut a = vec![vec![Signal::new(1.0, 1.0)]; 2];
@@ -15,24 +12,17 @@ static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
 });
 
 fn change_src_with_bf_1(c: &mut Criterion) {
-    let s = &*SIGNAL;
+    let s = SIGNAL();
     let src = SRC[0].as_slice();
     let signals = &SIGNALS[SIGNALS.len() - 1];
-    let bf = SIGNAL.bf(&*SRC, &*SIGNALS);
+    s.init_bf(&*SRC, &*SIGNALS);
     c.bench_function("change_src_with_bf", |b| {
-        b.iter(|| {
-            s.signal_with_bf(
-                black_box(src),
-                black_box(signals),
-                black_box(&bf),
-                black_box(0),
-            )
-        })
+        b.iter(|| s.signal_with_bf(black_box(src), black_box(signals)))
     });
 }
 
 fn change_src_signal_1(c: &mut Criterion) {
-    let s = &*SIGNAL;
+    let s = SIGNAL();
     let src = &*SRC;
     let signals = &*SIGNALS;
     c.bench_function("change_src_signal_1", |b| {
@@ -41,7 +31,7 @@ fn change_src_signal_1(c: &mut Criterion) {
 }
 
 fn change_src_coll_1(c: &mut Criterion) {
-    let s = &*SIGNAL;
+    let s = SIGNAL();
     let src = &*SRC;
     let signals = &*SIGNALS;
     c.bench_function("change_src_coll_1", |b| {
