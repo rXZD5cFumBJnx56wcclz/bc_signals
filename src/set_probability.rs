@@ -2,7 +2,7 @@
 
 use crate::prelude::*;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct SET_PROBABILITY;
 
 impl SignalReady for SET_PROBABILITY {

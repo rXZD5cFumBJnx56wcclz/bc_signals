@@ -2,7 +2,7 @@
 
 use crate::prelude::*;
 
-#[derive(Debug, PartialEq, Default)]
+#[derive(Debug, PartialEq, Default, Clone)]
 pub struct CHANGE_SIGNAL {
     signal_l: RefCell<f64>,
     signal_l_state: RefCell<f64>,

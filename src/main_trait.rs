@@ -1,6 +1,7 @@
 use std::any::Any;
 
 use bc_utils_lg::structs::signals::Signal;
+use dyn_clone::DynClone;
 
 fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> C
 where
@@ -42,7 +43,7 @@ where
     }
 }
 
-pub trait SignalReady: Any {
+pub trait SignalReady: Any + DynClone {
     fn w(&self) -> usize;
     fn init_bf(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]);
     fn execute_bf(&self);
@@ -66,6 +67,8 @@ pub trait SignalReady: Any {
         signal_coll(self, src, signals)
     }
 }
+
+dyn_clone::clone_trait_object!(SignalReady);
 
 pub trait SignalReadyExt: SignalReady {
     fn signal_coll<C>(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> C

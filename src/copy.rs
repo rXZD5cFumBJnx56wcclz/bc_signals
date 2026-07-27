@@ -2,7 +2,7 @@
 
 use crate::prelude::*;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct COPY;
 
 impl SignalReady for COPY {
