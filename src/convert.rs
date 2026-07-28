@@ -3,10 +3,13 @@ use crate::prelude::*;
 #[derive(Debug, PartialEq, Clone)]
 pub struct CONVERT;
 
-impl SignalReady for CONVERT {
+impl W for CONVERT{
     fn w(&self) -> usize {
         0
     }
+}
+
+impl SignalReady for CONVERT {
     fn init_bf(&self, _src: &[Vec<f64>], _signals: &[Vec<Signal>]) {}
     fn execute_bf(&self) {}
     fn signal_with_bf(&self, src: &[f64], _signals: &[Signal]) -> Signal {

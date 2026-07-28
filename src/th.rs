@@ -96,10 +96,13 @@ impl TH {
     }
 }
 
-impl SignalReady for TH {
+impl W for TH {
     fn w(&self) -> usize {
         2
     }
+}
+
+impl SignalReady for TH {
     fn init_bf(&self, src: &[Vec<f64>], _signals: &[Vec<Signal>]) {
         self.bf.borrow_mut().src_l = src[src.len() - 1].to_vec();
         *self.bf_state.borrow_mut() = self.bf.borrow().clone();

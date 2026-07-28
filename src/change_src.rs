@@ -52,10 +52,13 @@ impl CHANGE_SRC {
     }
 }
 
-impl SignalReady for CHANGE_SRC {
+impl W for CHANGE_SRC {
     fn w(&self) -> usize {
         2
     }
+}
+
+impl SignalReady for CHANGE_SRC {
     fn init_bf(&self, src: &[Vec<f64>], _signals: &[Vec<Signal>]) {
         self.bf.borrow_mut().src_l = src[src.len() - 1][0];
         *self.bf_state.borrow_mut() = self.bf.borrow().clone();

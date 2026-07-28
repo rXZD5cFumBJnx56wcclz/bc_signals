@@ -27,10 +27,13 @@ impl INVERT {
     }
 }
 
-impl SignalReady for INVERT {
+impl W for INVERT{
     fn w(&self) -> usize {
         0
     }
+}
+
+impl SignalReady for INVERT {
     fn init_bf(&self, _src: &[Vec<f64>], _signals: &[Vec<Signal>]) {}
     fn execute_bf(&self) {}
     fn signal_with_bf(&self, _src: &[f64], signals: &[Signal]) -> Signal {

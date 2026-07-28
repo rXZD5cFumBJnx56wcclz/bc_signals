@@ -8,10 +8,13 @@ pub struct CHANGE_SIGNAL {
     signal_l_state: RefCell<f64>,
 }
 
-impl SignalReady for CHANGE_SIGNAL {
+impl W for CHANGE_SIGNAL {
     fn w(&self) -> usize {
         2
     }
+}
+
+impl SignalReady for CHANGE_SIGNAL {
     fn init_bf(&self, _src: &[Vec<f64>], signals: &[Vec<Signal>]) {
         *self.signal_l.borrow_mut() = signals[signals.len() - 1][0].signal;
         *self.signal_l_state.borrow_mut() = *self.signal_l.borrow();

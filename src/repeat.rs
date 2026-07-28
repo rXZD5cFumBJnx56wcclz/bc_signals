@@ -15,10 +15,13 @@ impl REPEAT {
     }
 }
 
-impl SignalReady for REPEAT {
+impl W for REPEAT{
     fn w(&self) -> usize {
         0
     }
+}
+
+impl SignalReady for REPEAT {
     fn init_bf(&self, _src: &[Vec<f64>], _signals: &[Vec<Signal>]) {}
     fn execute_bf(&self) {}
     fn signal_with_bf(&self, _src: &[f64], _signals: &[Signal]) -> Signal {

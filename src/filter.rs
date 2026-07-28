@@ -3,10 +3,13 @@ use crate::prelude::*;
 #[derive(Debug, PartialEq, Clone)]
 pub struct FILTER;
 
-impl SignalReady for FILTER {
+impl W for FILTER{
     fn w(&self) -> usize {
         0
     }
+}
+
+impl SignalReady for FILTER {
     fn init_bf(&self, _src: &[Vec<f64>], _signals: &[Vec<Signal>]) {}
     fn execute_bf(&self) {}
     fn signal_with_bf(&self, _src: &[f64], signals: &[Signal]) -> Signal {
