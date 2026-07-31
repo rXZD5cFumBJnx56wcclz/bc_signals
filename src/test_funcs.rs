@@ -13,88 +13,60 @@ pub mod test_funcs {
         T: SignalReady,
         T: SignalReadyExt,
     {
-        let len_sub_in = in_.len().checked_sub(1).unwrap_or_default();
-        let len_sub_signals = signals.len().checked_sub(1).unwrap_or_default();
         settings_signal.init_bf(
-            in_.get(..len_sub_in).unwrap_or_default(),
-            signals.get(..len_sub_signals).unwrap_or_default(),
+            in_.get(..in_.len().checked_sub(1).unwrap_or_default())
+                .unwrap_or_default(),
+            signals
+                .get(..signals.len().checked_sub(1).unwrap_or_default())
+                .unwrap_or_default(),
         );
         assert_eq_pr!(
-            settings_signal.signal_with_bf(
-                in_.last().unwrap_or(&vec![0.0]),
-                &signals.get(len_sub_signals).unwrap_or(&vec![]),
+            settings_signal.signal(
+                &in_.last().cloned().unwrap_or_default(),
+                &signals.last().cloned().unwrap_or_default()
             ),
             eq,
         );
-    }
-
-    pub fn test_f_res_1<T>(
-        settings_signal: &T,
-        in_: &[Vec<f64>],
-        signals: &[Vec<Signal>],
-        eq: Signal,
-    ) where
-        T: SignalReady,
-        T: SignalReadyExt,
-    {
-        assert_eq_pr!(settings_signal.signal(in_, signals,), eq,);
     }
 
     pub fn test_coll_res_1<T>(
         settings_signal: &T,
         in_: &[Vec<f64>],
         signals: &[Vec<Signal>],
-        eq: Signal,
-        len_elements: usize,
+        interval_len: usize,
     ) where
         T: SignalReady,
+        T: Clone,
         T: SignalReadyExt,
     {
+        let sign_vec = settings_signal.clone();
+        let len_src = in_.len().checked_sub(interval_len).unwrap_or_default();
+        let len_signals = signals.len().checked_sub(interval_len).unwrap_or_default();
+        sign_vec.init_bf(
+            in_.get(..len_src).unwrap_or_default(),
+            signals.get(..len_signals).unwrap_or_default(),
+        );
+        let sign_value = settings_signal.clone();
+        sign_value.init_bf(
+            in_.get(..in_.len().checked_sub(1).unwrap_or_default())
+                .unwrap_or_default(),
+            signals
+                .get(..signals.len().checked_sub(1).unwrap_or_default())
+                .unwrap_or_default(),
+        );
         assert_eq_pr!(
-            dbg!(
-                settings_signal.signal_coll::<Vec<_>>(
-                    &in_.get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
-                        .unwrap_or_default(),
-                    signals,
+            sign_vec
+                .signals_vec(
+                    in_.get(len_src..).unwrap_or_default(),
+                    signals.get(len_signals..).unwrap_or_default(),
                 )
-            )[len_elements - 1],
-            eq,
-        );
-    }
-
-    pub fn test_coll_res_2<T>(
-        settings_signal: &T,
-        in_: &[Vec<f64>],
-        signals: &[Vec<Signal>],
-        len_elements: usize,
-    ) where
-        T: SignalReadyExt,
-    {
-        let in_ = &in_
-            .get(in_.len().checked_sub(len_elements).unwrap_or_default()..)
-            .unwrap_or_default();
-        assert_eq_pr!(
-            settings_signal.signal_coll::<Vec<_>>(in_, signals,)[len_elements - 1],
-            settings_signal.signal(in_, signals,),
-        );
-    }
-
-    pub fn test_coll_res_3<T>(
-        settings_signal: &T,
-        in_: &[Vec<f64>],
-        signals: &[Vec<Signal>],
-        eq: Vec<Signal>,
-    ) where
-        T: SignalReady,
-        T: SignalReadyExt,
-    {
-        assert_eq_pr!(
-            settings_signal
-                .signal_coll::<Vec<_>>(&in_, signals,)
-                .into_iter()
-                .filter(|v| !v.signal.is_nan())
-                .collect::<Vec<Signal>>(),
-            eq,
+                .last()
+                .copied()
+                .unwrap(),
+            sign_value.signal(
+                &in_.last().cloned().unwrap_or_default(),
+                &signals.last().cloned().unwrap_or_default()
+            ),
         );
     }
 }

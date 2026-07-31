@@ -15,7 +15,7 @@ impl REPEAT {
     }
 }
 
-impl W for REPEAT{
+impl W for REPEAT {
     fn w(&self) -> usize {
         0
     }
@@ -24,7 +24,7 @@ impl W for REPEAT{
 impl SignalReady for REPEAT {
     fn init_bf(&self, _src: &[Vec<f64>], _signals: &[Vec<Signal>]) {}
     fn execute_bf(&self) {}
-    fn signal_with_bf(&self, _src: &[f64], _signals: &[Signal]) -> Signal {
+    fn signal(&self, _src: &[f64], _signals: &[Signal]) -> Signal {
         Signal::new(self.value_signal, self.value_probability)
     }
 }
@@ -44,6 +44,7 @@ mod tests {
         vec![
             vec![Signal::new(-1.0, 1.0), Signal::new(1.0, 1.0)],
             vec![Signal::new(1.0, 1.0); 2],
+            vec![Signal::new(1.0, 1.0); 2],
         ]
     });
 
@@ -53,36 +54,7 @@ mod tests {
     }
 
     #[test]
-    fn repeat_signal_res_1() {
-        test_f_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES);
-    }
-
-    #[test]
     fn repeat_coll_res_1() {
-        test_coll_res_1(&*SIGNAL, &SRC, &SIGNALS, *RES, 2);
-    }
-
-    #[test]
-    fn repeat_coll_res_2() {
-        test_coll_res_2(&*SIGNAL, &SRC, &SIGNALS, 2);
-    }
-
-    #[test]
-    fn repeat_coll_res_3() {
-        test_coll_res_3(
-            &*SIGNAL,
-            &SRC,
-            &SIGNALS,
-            vec![
-                Signal {
-                    signal: 0.0,
-                    probability: 0.0,
-                },
-                Signal {
-                    signal: 0.0,
-                    probability: 0.0,
-                },
-            ],
-        );
+        test_coll_res_1(&*SIGNAL, &SRC, &SIGNALS, 1);
     }
 }

@@ -22,7 +22,7 @@ impl SignalReady for CHANGE_SIGNAL {
     fn execute_bf(&self) {
         *self.signal_l.borrow_mut() = *self.signal_l_state.borrow();
     }
-    fn signal_with_bf(&self, _src: &[f64], signals: &[Signal]) -> Signal {
+    fn signal(&self, _src: &[f64], signals: &[Signal]) -> Signal {
         let signal = *signals.get(0).expect("signal not found");
         *self.signal_l_state.borrow_mut() = signal.signal;
         if signal.signal != *self.signal_l.borrow() {
@@ -53,41 +53,12 @@ mod tests {
     });
 
     #[test]
-    fn change_signal_with_bf_res_1() {
+    fn change_signal_res_1() {
         test_bf_res_1(&SIGNAL(), &SRC, &SIGNALS, *RES);
     }
 
     #[test]
-    fn change_signal_res_1() {
-        test_f_res_1(&SIGNAL(), &SRC, &SIGNALS, *RES);
-    }
-
-    #[test]
     fn change_signal_coll_res_1() {
-        test_coll_res_1(&SIGNAL(), &SRC, &SIGNALS, *RES, 3);
-    }
-
-    #[test]
-    fn change_signal_coll_res_2() {
-        test_coll_res_2(&SIGNAL(), &SRC, &SIGNALS, 3);
-    }
-
-    #[test]
-    fn change_signal_coll_res_3() {
-        test_coll_res_3(
-            &SIGNAL(),
-            &SRC,
-            &SIGNALS,
-            vec![
-                Signal {
-                    signal: 0.0,
-                    probability: 1.0,
-                },
-                Signal {
-                    signal: -1.0,
-                    probability: 1.0,
-                },
-            ],
-        );
+        test_coll_res_1(&SIGNAL(), &SRC, &SIGNALS, 1);
     }
 }

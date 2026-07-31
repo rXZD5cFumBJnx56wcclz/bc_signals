@@ -9,36 +9,24 @@ where
     T: SignalReady,
     T: ?Sized,
 {
-    let w = signal_struct.w().checked_sub(1).unwrap_or_default();
-    signal_struct.init_bf(
-        &src.get(..w).unwrap_or_default(),
-        signals.get(..w).unwrap_or_default(),
-    );
-    let map_func = |i: usize, src: &[f64], s: &[Signal]| {
-        if i < w {
-            Signal::new(f64::NAN, 1.0)
-        } else {
-            let bind = signal_struct.signal_with_bf(src, s);
-            signal_struct.execute_bf();
-            bind
-        }
+    let map_func = |src: &[f64], s: &[Signal]| {
+        let bind = signal_struct.signal(src, s);
+        signal_struct.execute_bf();
+        bind
     };
     match (src.is_empty(), signals.is_empty()) {
         (false, false) | (true, true) => src
             .iter()
             .zip(signals)
-            .enumerate()
-            .map(|(i, (src, s))| map_func(i, src, s))
+            .map(|(src, s)| map_func(src, s))
             .collect(),
         (true, false) => signals
             .iter()
-            .enumerate()
-            .map(|(i, s)| map_func(i, Default::default(), s))
+            .map(|s| map_func(Default::default(), s))
             .collect(),
         (false, true) => src
             .iter()
-            .enumerate()
-            .map(|(i, sr)| map_func(i, sr, Default::default()))
+            .map(|src| map_func(src, Default::default()))
             .collect(),
     }
 }
@@ -46,22 +34,7 @@ where
 pub trait SignalReady: Any + W + DynClone {
     fn init_bf(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]);
     fn execute_bf(&self);
-    fn signal_with_bf(&self, src: &[f64], signals: &[Signal]) -> Signal;
-    fn signal(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> Signal {
-        let len_sub_one_signals = signals.len().checked_sub(1).unwrap_or_default();
-        if self.w() != 0 {
-            self.init_bf(
-                &src[src.len().checked_sub(self.w()).unwrap_or_default()
-                    ..src.len().checked_sub(1).unwrap_or_default()],
-                &signals
-                    [signals.len().checked_sub(self.w()).unwrap_or_default()..len_sub_one_signals],
-            );
-        }
-        self.signal_with_bf(
-            src.last().unwrap_or(&vec![]),
-            signals.last().unwrap_or(&vec![Signal::default()]),
-        )
-    }
+    fn signal(&self, src: &[f64], signals: &[Signal]) -> Signal;
     fn signals_vec(&self, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> Vec<Signal> {
         signal_coll(self, src, signals)
     }

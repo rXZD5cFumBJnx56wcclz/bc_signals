@@ -1,44 +1,19 @@
 mod prelude;
 use bc_signals::invert::*;
-use bc_signals::th::TH;
 use prelude::*;
 
-static SIGNAL: LazyLock<fn() -> INVERT> = LazyLock::new(|| || INVERT::default());
-static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| {
-    TH::new(0.0001, 0.0001, 1.0, 0, 0, 0, 0., -1., 1.)
-        .signals_vec(&*SRC, &vec![])
-        .into_iter()
-        .map(|s| vec![s])
-        .collect::<Vec<Vec<Signal>>>()
-});
+static SIGNAL: LazyLock<INVERT> = LazyLock::new(|| INVERT::default());
+static SIGNALS: LazyLock<Vec<Vec<Signal>>> = LazyLock::new(|| vec![vec![Signal::new(1., 1.),]; 3]);
 
 fn invert_with_bf_1(c: &mut Criterion) {
-    let s = SIGNAL();
+    let s = SIGNAL.clone();
     let src = &SRC[SRC.len() - 1];
     let signals = &SIGNALS[SIGNALS.len() - 1];
     s.init_bf(&*SRC, &*SIGNALS);
     c.bench_function("invert_with_bf", |b| {
-        b.iter(|| s.signal_with_bf(black_box(src), black_box(signals)))
+        b.iter(|| s.signal(black_box(src), black_box(signals)))
     });
 }
 
-fn invert_signal_1(c: &mut Criterion) {
-    let s = SIGNAL();
-    let src = &*SRC;
-    let signals = &*SIGNALS;
-    c.bench_function("invert_signal_1", |b| {
-        b.iter(|| s.signal(black_box(&src), black_box(&signals)))
-    });
-}
-
-fn invert_coll_1(c: &mut Criterion) {
-    let s = SIGNAL();
-    let src = &*SRC;
-    let signals = &*SIGNALS;
-    c.bench_function("invert_coll_1", |b| {
-        b.iter(|| s.signal_coll::<Vec<_>>(black_box(&src), black_box(&signals)))
-    });
-}
-
-criterion_group!(benches, invert_with_bf_1, invert_signal_1, invert_coll_1);
+criterion_group!(benches, invert_with_bf_1,);
 criterion_main!(benches);

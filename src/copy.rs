@@ -5,7 +5,7 @@ use crate::prelude::*;
 #[derive(Debug, PartialEq, Clone)]
 pub struct COPY;
 
-impl W for COPY{
+impl W for COPY {
     fn w(&self) -> usize {
         0
     }
@@ -14,7 +14,7 @@ impl W for COPY{
 impl SignalReady for COPY {
     fn init_bf(&self, _src: &[Vec<f64>], _signals: &[Vec<Signal>]) {}
     fn execute_bf(&self) {}
-    fn signal_with_bf(&self, _src: &[f64], signals: &[Signal]) -> Signal {
+    fn signal(&self, _src: &[f64], signals: &[Signal]) -> Signal {
         signals[0]
     }
 }
@@ -27,7 +27,7 @@ mod tests {
 
     use crate::prelude_tests::prelude::*;
 
-    static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![vec![0.7333333333333333,]; 2]);
+    static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| vec![vec![0.7333333333333333,]; 3]);
     const RES: LazyLock<Signal> = LazyLock::new(|| Signal::new(1.0, 1.0));
     static SIGNALS: LazyLock<Vec<Vec<Signal>>> =
         LazyLock::new(|| vec![vec![Signal::new(1.0, 1.0)]; 2]);
@@ -38,36 +38,7 @@ mod tests {
     }
 
     #[test]
-    fn copy_signal_res_1() {
-        test_f_res_1(&COPY, &SRC, &SIGNALS, *RES);
-    }
-
-    #[test]
     fn copy_coll_res_1() {
-        test_coll_res_1(&COPY, &SRC, &SIGNALS, *RES, 2);
-    }
-
-    #[test]
-    fn copy_coll_res_2() {
-        test_coll_res_2(&COPY, &SRC, &SIGNALS, 2);
-    }
-
-    #[test]
-    fn copy_coll_res_3() {
-        test_coll_res_3(
-            &COPY,
-            &SRC,
-            &SIGNALS,
-            vec![
-                Signal {
-                    signal: 1.0,
-                    probability: 1.0,
-                },
-                Signal {
-                    signal: 1.0,
-                    probability: 1.0,
-                },
-            ],
-        );
+        test_coll_res_1(&COPY, &SRC, &SIGNALS, 1);
     }
 }

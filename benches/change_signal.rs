@@ -7,38 +7,15 @@ static SRC: LazyLock<Vec<Vec<f64>>> = LazyLock::new(|| Default::default());
 static SIGNALS: LazyLock<Vec<Vec<Signal>>> =
     LazyLock::new(|| vec![vec![Signal::default(), Signal::new(1.0, 1.0)]; 2]);
 
-fn change_signal_with_bf_1(c: &mut Criterion) {
+fn change_signal_1(c: &mut Criterion) {
     let s = SIGNAL();
     let src = Default::default();
     let signals = &SIGNALS[SIGNALS.len() - 1];
     s.init_bf(&*SRC, &*SIGNALS);
-    c.bench_function("change_signal_with_bf", |b| {
-        b.iter(|| s.signal_with_bf(black_box(src), black_box(signals)))
+    c.bench_function("change_signal", |b| {
+        b.iter(|| s.signal(black_box(src), black_box(signals)))
     });
 }
 
-fn change_signal_signal_1(c: &mut Criterion) {
-    let s = SIGNAL();
-    let src = &*SRC;
-    let signals = &*SIGNALS;
-    c.bench_function("change_signal_signal_1", |b| {
-        b.iter(|| s.signal(black_box(&src), black_box(&signals)))
-    });
-}
-
-fn change_signal_coll_1(c: &mut Criterion) {
-    let s = SIGNAL();
-    let src = &*SRC;
-    let signals = &*SIGNALS;
-    c.bench_function("change_signal_coll_1", |b| {
-        b.iter(|| s.signal_coll::<Vec<_>>(black_box(&src), black_box(&signals)))
-    });
-}
-
-criterion_group!(
-    benches,
-    change_signal_with_bf_1,
-    change_signal_signal_1,
-    change_signal_coll_1
-);
+criterion_group!(benches, change_signal_1,);
 criterion_main!(benches);

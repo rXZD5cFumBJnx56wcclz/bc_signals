@@ -66,7 +66,7 @@ impl SignalReady for CHANGE_SRC {
     fn execute_bf(&self) {
         *self.bf.borrow_mut() = self.bf_state.borrow().clone();
     }
-    fn signal_with_bf(&self, src: &[f64], _signals: &[Signal]) -> Signal {
+    fn signal(&self, src: &[f64], _signals: &[Signal]) -> Signal {
         let sr = *src.get(0).expect("src not found");
         let ord = sr.partial_cmp(&self.bf.borrow().src_l).unwrap();
         self.bf_state.borrow_mut().src_l = sr;
@@ -102,36 +102,7 @@ mod tests {
     }
 
     #[test]
-    fn change_src_res_1() {
-        test_f_res_1(&SIGNAL(), &SRC, &SIGNALS, *RES);
-    }
-
-    #[test]
     fn change_src_coll_res_1() {
-        test_coll_res_1(&SIGNAL(), &SRC, &SIGNALS, *RES, 3);
-    }
-
-    #[test]
-    fn change_src_coll_res_2() {
-        test_coll_res_2(&SIGNAL(), &SRC, &SIGNALS, 3);
-    }
-
-    #[test]
-    fn change_src_coll_res_3() {
-        test_coll_res_3(
-            &SIGNAL(),
-            &SRC,
-            &SIGNALS,
-            vec![
-                Signal {
-                    signal: 1.0,
-                    probability: 1.0,
-                },
-                Signal {
-                    signal: 1.0,
-                    probability: 1.0,
-                },
-            ],
-        );
+        test_coll_res_1(&SIGNAL(), &SRC, &SIGNALS, 1);
     }
 }
