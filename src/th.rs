@@ -98,7 +98,7 @@ impl TH {
 
 impl W for TH {
     fn w(&self) -> usize {
-        2
+        1
     }
 }
 

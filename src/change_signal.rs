@@ -10,7 +10,7 @@ pub struct CHANGE_SIGNAL {
 
 impl W for CHANGE_SIGNAL {
     fn w(&self) -> usize {
-        2
+        1
     }
 }
 

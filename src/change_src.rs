@@ -54,7 +54,7 @@ impl CHANGE_SRC {
 
 impl W for CHANGE_SRC {
     fn w(&self) -> usize {
-        2
+        1
     }
 }
 
