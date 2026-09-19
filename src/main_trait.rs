@@ -1,7 +1,9 @@
 use std::any::Any;
 
-use bc_utils_lg::{structs::signals::Signal, traits::w::W};
+use bc_utils_lg::traits::w::W;
 use dyn_clone::DynClone;
+
+use crate::prelude::*;
 
 fn signal_coll<C, T>(signal_struct: &T, src: &[Vec<f64>], signals: &[Vec<Signal>]) -> C
 where
